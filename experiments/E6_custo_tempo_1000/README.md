@@ -8,11 +8,6 @@ Processar 1000 relatos mantém latência e custo por relato dentro de limites pr
 - Estabelecer um gold set ou rótulos de referência, quando aplicável.
 - Medir uma métrica principal com alvo claro e 2 métricas secundárias.
 
-## Como rodar (sugestão mínima)
-1. Preparar os dados em `data/input.jsonl`.
-2. Executar o script/nota de execução do experimento.
-   - Exemplo: `python run.py --input data/input.jsonl --output resultados.json`
-3. Consolidar os resultados em um resumo curto e comparável.
 
 ## Como decidir
 - **Validada:** métrica principal atinge alvo + evidências qualitativas consistentes.
