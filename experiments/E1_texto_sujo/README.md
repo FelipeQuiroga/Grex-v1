@@ -1,7 +1,7 @@
 # E1 — IA entende texto sujo (gírias, abreviações, erros)
 
 ## Hipótese
-A IA mantém desempenho aceitável ao interpretar relatos com gírias, abreviações e erros ortográficos comuns.
+A IA consegue interpretar textos operacionais sujos e agrupá-los em temas coerentes, mesmo sem limpeza pesada.
 
 ## O que testar
 - Definir um dataset mínimo e realista para a hipótese.
