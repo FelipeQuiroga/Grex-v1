@@ -8,7 +8,28 @@ A IA mantém desempenho aceitável ao interpretar relatos com gírias, abreviaç
 - Estabelecer um gold set ou rótulos de referência, quando aplicável.
 - Medir uma métrica principal com alvo claro e 2 métricas secundárias.
 
+## Como rodar (local)
+```bash
+python experiments/E1_texto_sujo/run_experiment.py \
+  --dataset experiments/E0_dataset_goldset/dataset.csv \
+  --stopwords experiments/E0_dataset_goldset/stopwords_ptbr.txt \
+  --output experiments/E1_texto_sujo/output_report.md
+```
 
+Para habilitar o Pipeline C (BERTopic):
+```bash
+python experiments/E1_texto_sujo/run_experiment.py --run-bertopic
+```
+
+## Saída esperada
+- Arquivo `output_report.md` com:
+  - nº de clusters por pipeline
+  - percentual aproximado de ruído (quando aplicável)
+  - top termos por cluster
+  - exemplos de relatos
+  - resumo humano (1–2 frases)
+  - observações de clusters genéricos ou incoerentes
+  - seção final “Comparação e Insights”
 
 ## Como decidir
 - **Validada:** métrica principal atinge alvo + evidências qualitativas consistentes.
