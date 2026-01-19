@@ -371,12 +371,12 @@ def run_bertopic(texts: List[str], seed: int) -> Tuple[np.ndarray, Dict[int, Lis
     from bertopic import BERTopic
 
     # Configuração otimizada para português, sem cálculo de probabilidades (mais rápido)
+    # Nota: BERTopic não aceita seed diretamente; reprodutibilidade é controlada internamente
     topic_model = BERTopic(
         language="portuguese",
         calculate_probabilities=False,
         verbose=False,
         nr_topics=None,  # Deixa o algoritmo determinar o número de tópicos
-        seed=seed,
     )
     topics, _ = topic_model.fit_transform(texts)
     # Extrai os termos mais relevantes de cada tópico
