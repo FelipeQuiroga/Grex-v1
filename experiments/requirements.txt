@@ -1,0 +1,16 @@
+# Dependências para o experimento E1_texto_sujo
+# Instalar com: pip install -r requirements.txt
+
+# Processamento numérico e manipulação de dados
+numpy
+pandas
+
+# Machine Learning e clusterização
+scikit-learn
+hdbscan
+
+# Embeddings e processamento de texto
+sentence-transformers
+
+# Modelagem de tópicos (opcional, usado apenas com --run-bertopic)
+bertopic
