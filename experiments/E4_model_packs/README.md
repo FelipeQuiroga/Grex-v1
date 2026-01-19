@@ -1,15 +1,32 @@
-# E4 — Model Packs setoriais são modularizáveis
+# 📁 Experimento 4 — Model Packs Setoriais
 
-## Hipótese
-Model Packs por setor podem ser modularizados e melhoram clusters com 100-200 relatos sem custo excessivo.
+## E4 — Model Packs (Indústria vs Centro de Distribuição)
 
-## O que testar
-- Definir um dataset mínimo e realista para a hipótese.
-- Estabelecer um gold set ou rótulos de referência, quando aplicável.
-- Medir uma métrica principal com alvo claro e 2 métricas secundárias.
+### Contexto
+Clusters e interpretação funcionam, mas linguagem e contexto variam por setor.
 
+### Hipótese (E4)
+Model Packs setoriais (vocabulário, stopwords, boosting semântico) melhoram significativamente a qualidade dos clusters e da interpretação sem aumentar custo estrutural.
 
-## Como decidir
-- **Validada:** métrica principal atinge alvo + evidências qualitativas consistentes.
-- **Parcialmente validada:** métrica principal próxima do alvo e ajustes claros.
-- **Rejeitada:** métrica principal abaixo do mínimo aceitável ou sinais de risco.
+### O que testar
+Comparar:
+
+- Pipeline genérico.
+- Pipeline com Model Pack de Indústria.
+- Pipeline com Model Pack de CD.
+
+Avaliar:
+
+- separação temática.
+- qualidade dos labels.
+- clareza dos resumos.
+
+### O que é um Model Pack
+- Dicionário setorial.
+- Stopwords específicas.
+- Boost leve em termos críticos.
+- Prompt ajustado para o setor.
+
+### Como decidir
+- **Validada:** melhoria clara sem aumento de complexidade.
+- **Rejeitada:** ganho marginal ou custo alto.
