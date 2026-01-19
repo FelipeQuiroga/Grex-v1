@@ -1,15 +1,27 @@
-# E6 — Custo/tempo para processar 1000 relatos é previsível
+# 📁 Experimento 6 — Custo e Escalabilidade
 
-## Hipótese
-Processar 1000 relatos mantém latência e custo por relato dentro de limites previsíveis, sem congestionar filas.
+## E6 — Custo e tempo em escala
 
-## O que testar
-- Definir um dataset mínimo e realista para a hipótese.
-- Estabelecer um gold set ou rótulos de referência, quando aplicável.
-- Medir uma métrica principal com alvo claro e 2 métricas secundárias.
+### Contexto
+Antes de escalar, precisamos saber se o modelo é sustentável.
 
+### Hipótese (E6)
+A arquitetura (KMeans + IA gen por cluster) escala bem e mantém custo previsível.
 
-## Como decidir
-- **Validada:** métrica principal atinge alvo + evidências qualitativas consistentes.
-- **Parcialmente validada:** métrica principal próxima do alvo e ajustes claros.
-- **Rejeitada:** métrica principal abaixo do mínimo aceitável ou sinais de risco.
+### O que testar
+Processar 1.000 relatos.
+
+Medir:
+
+- tempo total.
+- custo de embeddings.
+- custo de chamadas de IA gen.
+
+Comparar:
+
+- IA por relato ❌.
+- IA por cluster ✅.
+
+### Como decidir
+- **Validada:** custo previsível e aceitável.
+- **Rejeitada:** custo explode ou latência inviável.

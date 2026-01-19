@@ -1,14 +1,31 @@
-# E3 — Resumos gerados são acionáveis para gestores
+# 📁 Experimento 3 — Qualidade dos Resumos e Confiança do Gestor
 
-## Hipótese
-Os resumos gerados contêm ações específicas, evitando generalidades, e podem ser usados diretamente por gestores.
+## E3 — Resumos acionáveis e confiança
 
-## O que testar
-- Definir um dataset mínimo e realista para a hipótese.
-- Estabelecer um gold set ou rótulos de referência, quando aplicável.
-- Medir uma métrica principal com alvo claro e 2 métricas secundárias.
+### Contexto
+No E2 validamos que a IA consegue interpretar clusters.
+Agora validamos se essa interpretação é boa o suficiente para gerar confiança.
 
-## Como decidir
-- **Validada:** métrica principal atinge alvo + evidências qualitativas consistentes.
-- **Parcialmente validada:** métrica principal próxima do alvo e ajustes claros.
-- **Rejeitada:** métrica principal abaixo do mínimo aceitável ou sinais de risco.
+### Hipótese (E3)
+Os resumos gerados pela IA são claros, específicos e confiáveis o suficiente para que gestores tomem decisões sem desconfiar da ferramenta.
+
+### O que testar
+Comparar dois cenários:
+
+- Clusters sem interpretação (apenas dados brutos).
+- Clusters com label + resumo + evidências.
+
+Avaliar:
+
+- clareza.
+- especificidade.
+- confiança percebida.
+
+### Métricas
+- Gestor entende o problema em < 2 minutos.
+- Gestor consegue explicar o cluster com suas próprias palavras.
+- Gestor cria ao menos 1 plano de ação.
+
+### Como decidir
+- **Validada:** resumos reduzem tempo de entendimento e aumentam ação.
+- **Rejeitada:** gestores preferem olhar só os relatos.
