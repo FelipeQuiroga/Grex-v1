@@ -29,13 +29,14 @@ Quando usar este script:
 
 Regras:
 - Sem limpeza agressiva (apenas trim e lower opcional).
-- Sem expansão manual de abreviações.
-- Sem tuning exaustivo.
+- Expansão de abreviações comuns (maq → maquina, dnv → de novo).
+- Configuração otimizada para datasets pequenos (50-200 textos).
 """
 
 from __future__ import annotations
 
 import argparse
+import re
 import random
 from dataclasses import dataclass
 from pathlib import Path
@@ -49,6 +50,8 @@ from sklearn.metrics import adjusted_rand_score
 # BERTopic combina embeddings, redução de dimensionalidade, clusterização e
 # extração de termos em uma solução integrada
 from bertopic import BERTopic
+from hdbscan import HDBSCAN
+from umap import UMAP
 
 # ============================================================================
 # Constantes de Configuração
@@ -66,6 +69,11 @@ DEFAULT_DATASET = (
 # O relatório contém análise detalhada dos tópicos identificados pelo BERTopic
 # Por padrão, salva como output_bertopic_report.md no mesmo diretório do script
 DEFAULT_OUTPUT = Path(__file__).resolve().parent / "output_bertopic_report.md"
+
+# Caminho padrão para o arquivo CSV de saída com os resultados da clusterização
+# O CSV contém id, texto, setor, topic_id e top_terms para cada documento
+# Por padrão, salva como output_bertopic_clusters.csv no mesmo diretório do script
+DEFAULT_CSV_OUTPUT = Path(__file__).resolve().parent / "output_bertopic_clusters.csv"
 
 # Caminho padrão para o arquivo de stopwords em português brasileiro
 # Cada stopword deve estar em uma linha separada
@@ -88,87 +96,6 @@ SEED_PRIMARY = 42
 # concordância entre duas clusterizações (1.0 = idêntico, 0.0 = aleatório)
 SEED_SECONDARY = 99
 
-# ============================================================================
-# ═══════════════════════════════════════════════════════════════════════════
-# CONFIGURAÇÃO DO MODELO DE EMBEDDINGS - TROQUE AQUI PARA USAR OUTROS MODELOS
-# ═══════════════════════════════════════════════════════════════════════════
-# ============================================================================
-
-# Modelo de embeddings usado pelo BERTopic para gerar representações vetoriais
-# dos textos. O BERTopic aceita modelos do SentenceTransformer ou Hugging Face.
-#
-# OPÇÃO 1: Usar modelo via parâmetro 'language' (mais simples)
-#   - BERTopic escolhe automaticamente um modelo adequado para o idioma
-#   - Exemplo: language="portuguese" usa modelo padrão para português
-#   - Vantagem: Simples, não precisa especificar modelo
-#   - Desvantagem: Menos controle sobre qual modelo específico usar
-#
-# OPÇÃO 2: Especificar modelo do SentenceTransformer diretamente (RECOMENDADO)
-#   - Use o parâmetro 'embedding_model' na inicialização do BERTopic
-#   - Aceita qualquer modelo do SentenceTransformer
-#   - Exemplos de modelos para português brasileiro:
-#     * "paraphrase-multilingual-MiniLM-L12-v2" (multilíngue, leve, rápido)
-#     * "paraphrase-multilingual-mpnet-base-v2" (multilíngue, melhor qualidade)
-#     * "rufimelo/bert-large-portuguese-cased-sts2" (específico PT-BR, melhor qualidade)
-#     * "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-#   - Exemplos de modelos multilíngues gerais:
-#     * "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-#     * "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
-#     * "sentence-transformers/distiluse-base-multilingual-cased-v2"
-#
-# OPÇÃO 3: Usar modelo do Hugging Face diretamente (avançado)
-#   - Instancie um modelo do SentenceTransformer com modelo do Hugging Face
-#   - Exemplo:
-#     from sentence_transformers import SentenceTransformer
-#     model = SentenceTransformer("neuralmind/bert-base-portuguese-cased")
-#     topic_model = BERTopic(embedding_model=model)
-#   - Modelos Hugging Face populares para português:
-#     * "neuralmind/bert-base-portuguese-cased"
-#     * "neuralmind/bert-large-portuguese-cased"
-#     * "pierreguillou/bert-base-cased-pt-lenerbr"
-#     * "pierreguillou/bert-large-cased-pt-lenerbr"
-#   - Modelos multilíngues do Hugging Face:
-#     * "bert-base-multilingual-cased"
-#     * "xlm-roberta-base"
-#     * "xlm-roberta-large"
-#
-# COMO TROCAR O MODELO:
-# 1. Para usar um modelo específico do SentenceTransformer:
-#    - Na função run_bertopic(), adicione o parâmetro embedding_model:
-#      topic_model = BERTopic(
-#          embedding_model="paraphrase-multilingual-MiniLM-L12-v2",  # <-- ADICIONE AQUI
-#          language=None,  # <-- REMOVA ou defina como None
-#          calculate_probabilities=False,
-#          verbose=False,
-#          nr_topics=None,
-#      )
-#
-# 2. Para usar um modelo do Hugging Face:
-#    - Importe SentenceTransformer no topo do arquivo
-#    - Crie uma constante ou instancie o modelo:
-#      from sentence_transformers import SentenceTransformer
-#      EMBEDDING_MODEL = SentenceTransformer("neuralmind/bert-base-portuguese-cased")
-#    - Use na função run_bertopic():
-#      topic_model = BERTopic(
-#          embedding_model=EMBEDDING_MODEL,  # <-- USE AQUI
-#          language=None,  # <-- REMOVA ou defina como None
-#          calculate_probabilities=False,
-#          verbose=False,
-#          nr_topics=None,
-#      )
-#
-# 3. Para testar múltiplos modelos facilmente:
-#    - Defina uma constante aqui e use na função run_bertopic()
-#    - Exemplo:
-#      EMBEDDING_MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"  # <-- TROQUE AQUI
-#      # Depois use na função: embedding_model=EMBEDDING_MODEL_NAME
-#
-# NOTA: Se você definir um modelo customizado, REMOVA ou defina language=None,
-#       pois os dois parâmetros são mutuamente exclusivos.
-
-# ============================================================================
-# Estruturas de Dados
-# ============================================================================
 
 @dataclass
 class ClusterReport:
@@ -446,8 +373,8 @@ def build_cluster_reports(
 # MODELOS SENTENCETRANSFORMER (RECOMENDADO):
 # EMBEDDING_MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"  # Leve, rápido, multilíngue
 # EMBEDDING_MODEL_NAME = "paraphrase-multilingual-mpnet-base-v2"  # Melhor qualidade, multilíngue
-EMBEDDING_MODEL_NAME = "rufimelo/bert-large-portuguese-cased-sts"
-#
+EMBEDDING_MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"	# rufimelo/bert-large-portuguese-cased-sts"
+#paraphrase-multilingual-mpnet-base-v2
 # MODELOS HUGGING FACE (via SentenceTransformer):
 # EMBEDDING_MODEL_NAME = "neuralmind/bert-base-portuguese-cased"  # BERT base para PT-BR
 # EMBEDDING_MODEL_NAME = "neuralmind/bert-large-portuguese-cased"  # BERT large para PT-BR
@@ -466,10 +393,27 @@ def run_bertopic(texts: List[str], seed: int) -> Tuple[np.ndarray, Dict[int, Lis
     # Instancia o modelo com o nome CORRETO
     hf_model = SentenceTransformer(EMBEDDING_MODEL_NAME)
     
-    # Configura o BERTopic com o modelo customizado
+    # Configuração para dataset PEQUENO (50-200 textos)
+    hdbscan_model = HDBSCAN(
+        min_cluster_size=3,        # ⬅️ MÍNIMO possível
+        min_samples=1,             # ⬅️ MÍNIMO possível
+        cluster_selection_epsilon=0.5,  # ⬅️ IMPORTANTE: relaxa critério
+        metric='euclidean'
+    )
+    
+    umap_model = UMAP(
+        n_neighbors=5,             # ⬅️ BAIXO: foco local
+        n_components=3,            # ⬅️ BAIXO: menos compressão
+        min_dist=0.0,
+        metric='cosine'
+    )
+    
+    # Configura o BERTopic com o modelo customizado e modelos de clusterização
     topic_model = BERTopic(
         embedding_model=hf_model,
         language=None,  # IMPORTANTE: None quando usar embedding_model customizado
+        hdbscan_model=hdbscan_model,  # ⬅️ HDBSCAN configurado para dataset pequeno
+        umap_model=umap_model,         # ⬅️ UMAP configurado para dataset pequeno
         calculate_probabilities=False,
         verbose=False,
         nr_topics=None,
@@ -490,7 +434,7 @@ def run_bertopic(texts: List[str], seed: int) -> Tuple[np.ndarray, Dict[int, Lis
     return np.array(topics), topic_terms
 
 
-def pipeline_bertopic(texts: List[str], stopwords: List[str]) -> PipelineReport:
+def pipeline_bertopic(texts: List[str], stopwords: List[str]) -> Tuple[PipelineReport, np.ndarray, Dict[int, List[str]]]:
     """Pipeline completo de modelagem de tópicos usando BERTopic.
     
     Esta função orquestra a execução completa do pipeline BERTopic, incluindo:
@@ -523,9 +467,12 @@ def pipeline_bertopic(texts: List[str], stopwords: List[str]) -> PipelineReport:
                    consistência com outros pipelines e análises auxiliares
         
     Returns:
-        PipelineReport com resultados completos e métricas do pipeline BERTopic
-        Inclui todos os tópicos identificados, métricas de estabilidade e ruído,
-        e observações sobre os resultados
+        Tupla contendo:
+        - PipelineReport com resultados completos e métricas do pipeline BERTopic
+          Inclui todos os tópicos identificados, métricas de estabilidade e ruído,
+          e observações sobre os resultados
+        - Array numpy com os labels de tópico para cada documento (execução primária)
+        - Dicionário mapeando topic_id para lista dos termos mais relevantes (execução primária)
     """
     # BERTopic gera seus próprios embeddings internamente
     # Diferente dos outros pipelines que compartilham embeddings, o BERTopic
@@ -592,7 +539,7 @@ def pipeline_bertopic(texts: List[str], stopwords: List[str]) -> PipelineReport:
     # na estrutura dos dados e parâmetros do HDBSCAN
     num_clusters = len({label for label in labels_primary if label != -1})
     
-    return PipelineReport(
+    report = PipelineReport(
         name="Pipeline BERTopic — Exploração rápida de tópicos",
         num_clusters=num_clusters,
         clusters=clusters,
@@ -600,6 +547,10 @@ def pipeline_bertopic(texts: List[str], stopwords: List[str]) -> PipelineReport:
         noise_ratio=noise_ratio,
         notes=notes,
     )
+    
+    # Retorna o relatório junto com os labels e termos da execução primária
+    # para permitir exportação CSV dos resultados
+    return report, labels_primary, topic_terms_primary
 
 
 # ============================================================================
@@ -719,6 +670,67 @@ def build_report(report: PipelineReport) -> str:
     return f"{pipeline_text}\n\n{insights}\n{decisions}\n"
 
 
+def export_clustering_csv(
+    df: pd.DataFrame,
+    labels: np.ndarray,
+    topic_terms: Dict[int, List[str]],
+    output_path: Path,
+) -> None:
+    """Exporta os resultados da clusterização para um arquivo CSV.
+    
+    Esta função cria um DataFrame com os resultados da clusterização e salva
+    em formato CSV, permitindo análise posterior dos dados em ferramentas como
+    Excel ou pandas. O CSV contém informações sobre cada documento e seu tópico
+    atribuído, incluindo os termos mais relevantes do tópico.
+    
+    Estrutura do CSV gerado:
+    - id: Identificador único do documento (do dataset original)
+    - texto: Texto original do documento
+    - setor: Setor/categoria do documento (do dataset original)
+    - topic_id: ID do tópico/cluster atribuído pelo BERTopic (-1 para ruído)
+    - top_terms: Termos mais relevantes do tópico (separados por vírgula)
+    
+    Args:
+        df: DataFrame original com as colunas id, texto e setor
+            Deve ter o mesmo número de linhas que o array labels
+        labels: Array numpy com os labels de tópico para cada documento
+                Gerado pelo BERTopic, pode incluir -1 para ruído
+        topic_terms: Dicionário mapeando topic_id para lista dos termos mais
+                     relevantes. Fornecido pelo BERTopic via c-TF-IDF
+        output_path: Caminho onde o arquivo CSV será salvo
+        
+    Raises:
+        ValueError: Se o número de labels não corresponder ao número de linhas do DataFrame
+                   Esta validação previne erros durante a criação do DataFrame
+    """
+    # Valida que o número de labels corresponde ao número de documentos
+    if len(labels) != len(df):
+        raise ValueError(
+            f"Número de labels ({len(labels)}) não corresponde ao número de "
+            f"documentos no DataFrame ({len(df)})"
+        )
+    
+    # Cria DataFrame com os dados originais
+    result_df = df.copy()
+    
+    # Adiciona coluna com topic_id
+    result_df["topic_id"] = labels
+    
+    # Adiciona coluna com top_terms (termos mais relevantes do tópico)
+    # Para cada documento, busca os termos do seu tópico e junta com vírgula
+    # Se o tópico for -1 (ruído), usa lista vazia
+    result_df["top_terms"] = [
+        ", ".join(topic_terms.get(topic_id, []))
+        for topic_id in labels
+    ]
+    
+    # Reordena colunas para facilitar leitura: id, texto, setor, topic_id, top_terms
+    result_df = result_df[["id", "texto", "setor", "topic_id", "top_terms"]]
+    
+    # Salva CSV com encoding UTF-8 e sem índice
+    result_df.to_csv(output_path, index=False, encoding="utf-8")
+
+
 # ============================================================================
 # Funções Principais
 # ============================================================================
@@ -734,6 +746,7 @@ def parse_args() -> argparse.Namespace:
     Argumentos disponíveis:
     - --dataset: Caminho para o arquivo CSV do dataset
     - --output: Caminho para o arquivo de saída do relatório Markdown
+    - --csv-output: Caminho para o arquivo CSV de saída com resultados da clusterização
     - --stopwords: Caminho para o arquivo de stopwords em português
     
     Returns:
@@ -754,6 +767,12 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=DEFAULT_OUTPUT,
         help="Arquivo de saída markdown",
+    )
+    parser.add_argument(
+        "--csv-output",
+        type=Path,
+        default=DEFAULT_CSV_OUTPUT,
+        help="Arquivo CSV de saída com resultados da clusterização",
     )
     parser.add_argument(
         "--stopwords",
@@ -805,7 +824,12 @@ def main() -> None:
        - Observações e insights
        - Seção para decisões e próximos passos
     
-    8. **Salvamento e exibição**: Salva o relatório em arquivo e também imprime
+    8. **Exportação CSV**: Exporta resultados da clusterização para CSV contendo:
+       - Dados originais (id, texto, setor)
+       - Tópico atribuído (topic_id)
+       - Termos mais relevantes do tópico (top_terms)
+    
+    9. **Salvamento e exibição**: Salva o relatório em arquivo e também imprime
        no console para visualização imediata.
     
     Por que o BERTopic é executado separadamente:
@@ -857,13 +881,19 @@ def main() -> None:
     # outros pipelines que compartilham embeddings. Isso permite otimização
     # específica para modelagem de tópicos, mas também significa que não
     # podemos reutilizar embeddings de outros pipelines
-    report = pipeline_bertopic(texts, stopwords)
+    # O pipeline retorna o relatório, os labels e os termos dos tópicos
+    report, labels, topic_terms = pipeline_bertopic(texts, stopwords)
     
     # Gera relatório final e salva em arquivo
     # O relatório contém análise detalhada dos tópicos identificados, métricas
     # de qualidade, e insights sobre os resultados
     report_text = build_report(report)
     args.output.write_text(report_text, encoding="utf-8")
+    
+    # Exporta resultados da clusterização para CSV
+    # O CSV contém id, texto, setor, topic_id e top_terms para cada documento
+    # Permite análise posterior dos dados em ferramentas como Excel ou pandas
+    export_clustering_csv(df, labels, topic_terms, args.csv_output)
     
     # Também imprime no console para visualização imediata
     # Útil para ver resultados rapidamente sem abrir o arquivo
