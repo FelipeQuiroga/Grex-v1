@@ -44,8 +44,12 @@ DEFAULT_STOPWORDS = (
 )
 
 # Nome do modelo de embeddings do SentenceTransformer
-# all-MiniLM-L6-v2 é um modelo leve e rápido, adequado para MVP
-MODEL_NAME = "all-MiniLM-L6-v2"
+# Modelo multilíngue que inclui português brasileiro, leve e rápido, adequado para MVP
+# Alternativas para português BR:
+# - "paraphrase-multilingual-MiniLM-L12-v2" (multilíngue, inclui PT-BR)
+# - "paraphrase-multilingual-mpnet-base-v2" (multilíngue, melhor qualidade)
+# - "rufimelo/bert-large-portuguese-cased-sts2" (específico PT-BR, melhor qualidade)
+MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"
 
 # Número de clusters para o algoritmo KMeans
 # Valor fixo escolhido baseado na expectativa de 5-8 temas operacionais em ~100 relatos
@@ -350,48 +354,6 @@ def run_hdbscan(embeddings: np.ndarray) -> np.ndarray:
     return clusterer.fit_predict(embeddings)
 
 
-def run_bertopic(texts: List[str], seed: int) -> Tuple[np.ndarray, Dict[int, List[str]]]:
-    """Executa clusterização e modelagem de tópicos usando BERTopic.
-    
-    BERTopic é uma biblioteca que combina embeddings (SentenceTransformer) com
-    técnicas de modelagem de tópicos (UMAP + HDBSCAN + c-TF-IDF) para gerar
-    tópicos interpretáveis automaticamente. É mais "caixa-preta" que os outros
-    pipelines, mas gera tópicos mais legíveis rapidamente.
-    
-    Args:
-        texts: Lista de textos a serem analisados
-        seed: Seed para garantir reprodutibilidade
-        
-    Returns:
-        Tupla contendo:
-        - Array numpy com os labels de tópico para cada texto (pode incluir -1 para ruído)
-        - Dicionário mapeando topic_id para lista dos 6 termos mais relevantes do tópico
-    """
-    # Importação condicional para evitar erro se bertopic não estiver instalado
-    from bertopic import BERTopic
-
-    # Configuração otimizada para português, sem cálculo de probabilidades (mais rápido)
-    # Nota: BERTopic não aceita seed diretamente; reprodutibilidade é controlada internamente
-    topic_model = BERTopic(
-        language="portuguese",
-        calculate_probabilities=False,
-        verbose=False,
-        nr_topics=None,  # Deixa o algoritmo determinar o número de tópicos
-    )
-    topics, _ = topic_model.fit_transform(texts)
-    # Extrai os termos mais relevantes de cada tópico
-    topic_terms: Dict[int, List[str]] = {}
-    for topic_id in sorted(set(topics)):
-        if topic_id == -1:
-            # Tópico -1 é ruído, não tem termos representativos
-            topic_terms[topic_id] = []
-            continue
-        # Pega os 6 termos mais relevantes do tópico
-        terms = [term for term, _ in topic_model.get_topic(topic_id)[:6]]
-        topic_terms[topic_id] = terms
-    return np.array(topics), topic_terms
-
-
 # ============================================================================
 # Pipelines de Clusterização
 # ============================================================================
@@ -476,66 +438,6 @@ def pipeline_b(
     )
 
 
-def pipeline_c(texts: List[str], stopwords: List[str]) -> PipelineReport:
-    """Pipeline C: Modelagem de tópicos usando BERTopic.
-    
-    BERTopic é uma solução mais completa que combina embeddings, redução de
-    dimensionalidade (UMAP), clusterização (HDBSCAN) e extração de termos
-    (c-TF-IDF) para gerar tópicos interpretáveis. É mais pesado e "caixa-preta"
-    que os outros pipelines, mas pode gerar tópicos mais legíveis rapidamente.
-    
-    Nota: Este pipeline é opcional e só é executado com a flag --run-bertopic.
-    
-    Args:
-        texts: Lista de textos originais
-        stopwords: Lista de stopwords (usado apenas para consistência, BERTopic tem seu próprio processamento)
-        
-    Returns:
-        PipelineReport com resultados e métricas do Pipeline C
-    """
-    # BERTopic gera seus próprios embeddings internamente, não usa os embeddings compartilhados
-    labels_primary, topic_terms = run_bertopic(texts, SEED_PRIMARY)
-    labels_secondary, _ = run_bertopic(texts, SEED_SECONDARY)
-    # Calcula estabilidade entre duas execuções
-    stability = adjusted_rand_score(labels_primary, labels_secondary)
-
-    clusters: List[ClusterReport] = []
-    notes: List[str] = [
-        "BERTopic gera tópicos legíveis rápido, mas é mais caixa-preta e pesado."
-    ]
-    # Calcula proporção de ruído (tópico -1)
-    noise_ratio = float(np.mean(labels_primary == -1))
-    # Constrói relatórios para cada tópico identificado
-    for label in sorted(set(labels_primary)):
-        cluster_texts = [text for text, topic in zip(texts, labels_primary) if topic == label]
-        # BERTopic já fornece os termos mais relevantes, não precisamos calcular via TF-IDF
-        top_terms = topic_terms.get(label, [])
-        examples = cluster_texts[:5]
-        summary = summarize_cluster(top_terms, examples[0]) if examples else "Sem exemplos."
-        generic_or_incoherent = label == -1 or len(cluster_texts) < 3 or not top_terms
-        if label == -1:
-            notes.append("Topic -1 representa ruído/itens não atribuídos.")
-        clusters.append(
-            ClusterReport(
-                label=label,
-                size=len(cluster_texts),
-                top_terms=top_terms,
-                examples=examples,
-                summary=summary,
-                generic_or_incoherent=generic_or_incoherent,
-            )
-        )
-    num_clusters = len({label for label in labels_primary if label != -1})
-    return PipelineReport(
-        name="Pipeline C — Exploração rápida (BERTopic)",
-        num_clusters=num_clusters,
-        clusters=clusters,
-        stability_ari=stability,
-        noise_ratio=noise_ratio,
-        notes=notes,
-    )
-
-
 # ============================================================================
 # Funções de Formatação e Relatório
 # ============================================================================
@@ -607,7 +509,6 @@ def build_report(reports: List[PipelineReport]) -> str:
         "Comparação e Insights\n"
         "- KMeans tende a gerar temas consistentes e explicáveis.\n"
         "- HDBSCAN destaca ruído, útil para ver itens fora do padrão.\n"
-        "- BERTopic acelera geração de tópicos, mas adiciona complexidade.\n"
         "- Avalie: quais clusters são mais explicáveis para um gestor.\n"
         "- Avalie: qual pipeline mistura menos temas distintos.\n"
         "- Avalie: qual parece mais simples de manter no MVP.\n"
@@ -634,9 +535,8 @@ def build_report(reports: List[PipelineReport]) -> str:
 def parse_args() -> argparse.Namespace:
     """Parse dos argumentos de linha de comando.
     
-    Permite customizar caminhos de entrada/saída e habilitar o pipeline opcional
-    BERTopic. Todos os argumentos têm valores padrão baseados nas constantes
-    globais, permitindo execução sem parâmetros.
+    Permite customizar caminhos de entrada/saída. Todos os argumentos têm
+    valores padrão baseados nas constantes globais, permitindo execução sem parâmetros.
     
     Returns:
         Namespace do argparse contendo todos os argumentos parseados
@@ -659,11 +559,6 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=DEFAULT_STOPWORDS,
         help="Arquivo com stopwords pt-br (1 por linha)",
-    )
-    parser.add_argument(
-        "--run-bertopic",
-        action="store_true",
-        help="Executa o Pipeline C (BERTopic)",
     )
     return parser.parse_args()
 
@@ -696,14 +591,11 @@ def main() -> None:
     # Gera embeddings uma única vez (compartilhado entre pipelines A e B)
     embeddings = build_embeddings(texts)
     
-    # Executa pipelines obrigatórios (A e B)
+    # Executa pipelines (A e B)
     reports = [
         pipeline_a(texts, embeddings, stopwords),
         pipeline_b(texts, embeddings, stopwords),
     ]
-    # Pipeline C (BERTopic) é opcional e mais pesado
-    if args.run_bertopic:
-        reports.append(pipeline_c(texts, stopwords))
 
     # Gera relatório final e salva em arquivo
     report_text = build_report(reports)
