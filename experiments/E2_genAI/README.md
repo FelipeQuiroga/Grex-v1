@@ -3,7 +3,7 @@
 ## E2 — Interpretação dos clusters com IA generativa
 
 ### Contexto
-No Experimento 1 validamos que a clusterização (KMeans) consegue organizar relatos operacionais sujos em grupos coerentes do ponto de vista humano.
+No Experimento 1 validamos que a clusterização (Bertopic) consegue organizar relatos operacionais sujos em grupos coerentes do ponto de vista humano.
 
 Neste experimento, não alteramos a clusterização.
 O foco passa a ser extrair valor dos clusters usando IA generativa.
@@ -28,8 +28,6 @@ Ela recebe um pacote estruturado por cluster:
 - Estatísticas simples:
   - número de relatos.
   - setor (indústria / CD).
-  - tendência (se disponível).
-  - área/origem (se disponível).
 
 ⚠️ A IA não pode “inventar” contexto fora disso.
 

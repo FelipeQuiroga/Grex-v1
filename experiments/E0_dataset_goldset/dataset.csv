@@ -1,101 +1,1001 @@
 id,texto,setor
-1,"maq 3 parou dnv","industria"
-2,"prensa travou no meio do turno","industria"
-3,"sensor falhando toda hora","industria"
-4,"setup lento na troca de turno","industria"
-5,"mt calor na linha 2","industria"
-6,"refeitorio horrivel hj","industria"
-7,"lider n escuta ngm","industria"
-8,"barulho excessivo na prensa","industria"
-9,"linha 1 atrasou dnv","industria"
-10,"dor nas costas depois do turno","industria"
-11,"maq velha demais","industria"
-12,"mt retrabalho na linha 3","industria"
-13,"troca de turno confusa","industria"
-14,"fila enorme no almoco","industria"
-15,"ambiente pesado hj","industria"
-16,"sensor temp bugado","industria"
-17,"comida fria no refeitorio","industria"
-18,"ninguém resolve problema da maq","industria"
-19,"linha parada por falha eletrica","industria"
-20,"ritmo puxado demais","industria"
-21,"esteira parou 2x hoje","industria"
-22,"checklist de setup incompleto","industria"
-23,"lider cobra mas n ajuda","industria"
-24,"posto mal ajustado","industria"
-25,"mt calor e barulho","industria"
-26,"maq parando sempre no msm ponto","industria"
-27,"reclamação geral do turno da noite","industria"
-28,"sensor nao le direito","industria"
-29,"operador sobrecarregado","industria"
-30,"linha 2 atrasou por manutencao","industria"
-31,"empilhadeira parada sem bateria","cd"
-32,"separacao lenta hj","cd"
-33,"picking confuso","cd"
-34,"estoque desorganizado","cd"
-35,"mt erro na conferencia","cd"
-36,"sistema lento no turno","cd"
-37,"palete quebrado","cd"
-38,"fila grande no carregamento","cd"
-39,"lider n da retorno","cd"
-40,"rota mal planejada","cd"
-41,"operador cansado","cd"
-42,"doca congestionada","cd"
-43,"etiqueta ilegivel","cd"
-44,"falta caixa pra picking","cd"
-45,"pedido voltou errado","cd"
-46,"empilhadeira falhando","cd"
-47,"reentrega frequente","cd"
-48,"mt pressao por meta","cd"
-49,"estoque divergente","cd"
-50,"separacao refeita","cd"
-51,"turno curto pra demanda","cd"
-52,"erro recorrente no picking","cd"
-53,"conferencia manual lenta","cd"
-54,"lider ausente no turno","cd"
-55,"rota atrasou entrega","cd"
-56,"palete fora do padrao","cd"
-57,"falta treinamento novo operador","cd"
-58,"scanner nao funciona direito","cd"
-59,"doca sem organizacao","cd"
-60,"retrabalho no carregamento","cd"
-61,"sistema caiu no meio do turno","cd"
-62,"empilhadeira disputada","cd"
-63,"mt deslocamento desnecessario","cd"
-64,"layout confuso","cd"
-65,"erro na separacao por endereco","cd"
-66,"pedido incompleto","cd"
-67,"operador novo perdido","cd"
-68,"estoque mal enderecado","cd"
-69,"picking manual lento","cd"
-70,"rota refeita por erro","cd"
-71,"linha parou por falta material","industria"
-72,"atraso na liberacao da qualidade","industria"
-73,"maq vibrando demais","industria"
-74,"check de seguranca falhou","industria"
-75,"operador sem apoio","industria"
-76,"excesso de refugos","industria"
-77,"manutencao demorou p chegar","industria"
-78,"sensor desalinhado","industria"
-79,"setup feito errado","industria"
-80,"linha travou no inicio turno","industria"
-81,"separacao atrasada por estoque","cd"
-82,"doca sem equipe suficiente","cd"
-83,"palete errado carregado","cd"
-84,"pedido trocado","cd"
-85,"scanner sem bateria","cd"
-86,"fila grande p descarregar","cd"
-87,"retrabalho na rota","cd"
-88,"sistema nao atualiza estoque","cd"
-89,"lider so cobra resultado","cd"
-90,"erro frequente na expedicao","cd"
-91,"maq superaquecendo","industria"
-92,"posto desconfortavel","industria"
-93,"excesso de horas extras","industria"
-94,"linha 3 parou varias vezes","industria"
-95,"refeitorio sujo","industria"
-96,"layout da linha ruim","industria"
-97,"picking confunde enderecos","cd"
-98,"estoque lotado","cd"
-99,"doca mal sinalizada","cd"
-100,"rota sobrecarregada","cd"
+1,maq 3 parou dnv,industria
+2,prensa travou no meio do turno,industria
+3,sensor falhando toda hora,industria
+4,setup lento na troca de turno,industria
+5,mt calor na linha 2,industria
+6,refeitorio horrivel hj,industria
+7,lider n escuta ngm,industria
+8,barulho excessivo na prensa,industria
+9,linha 1 atrasou dnv,industria
+10,dor nas costas depois do turno,industria
+11,maq velha demais,industria
+12,mt retrabalho na linha 3,industria
+13,troca de turno confusa,industria
+14,fila enorme no almoco,industria
+15,ambiente pesado hj,industria
+16,sensor temp bugado,industria
+17,comida fria no refeitorio,industria
+18,ninguém resolve problema da maq,industria
+19,linha parada por falha eletrica,industria
+20,ritmo puxado demais,industria
+21,esteira parou 2x hoje,industria
+22,checklist de setup incompleto,industria
+23,lider cobra mas n ajuda,industria
+24,posto mal ajustado,industria
+25,mt calor e barulho,industria
+26,maq parando sempre no msm ponto,industria
+27,reclamação geral do turno da noite,industria
+28,sensor nao le direito,industria
+29,operador sobrecarregado,industria
+30,linha 2 atrasou por manutencao,industria
+31,empilhadeira parada sem bateria,cd
+32,separacao lenta hj,cd
+33,picking confuso,cd
+34,estoque desorganizado,cd
+35,mt erro na conferencia,cd
+36,sistema lento no turno,cd
+37,palete quebrado,cd
+38,fila grande no carregamento,cd
+39,lider n da retorno,cd
+40,rota mal planejada,cd
+41,operador cansado,cd
+42,doca congestionada,cd
+43,etiqueta ilegivel,cd
+44,falta caixa pra picking,cd
+45,pedido voltou errado,cd
+46,empilhadeira falhando,cd
+47,reentrega frequente,cd
+48,mt pressao por meta,cd
+49,estoque divergente,cd
+50,separacao refeita,cd
+51,turno curto pra demanda,cd
+52,erro recorrente no picking,cd
+53,conferencia manual lenta,cd
+54,lider ausente no turno,cd
+55,rota atrasou entrega,cd
+56,palete fora do padrao,cd
+57,falta treinamento novo operador,cd
+58,scanner nao funciona direito,cd
+59,doca sem organizacao,cd
+60,retrabalho no carregamento,cd
+61,sistema caiu no meio do turno,cd
+62,empilhadeira disputada,cd
+63,mt deslocamento desnecessario,cd
+64,layout confuso,cd
+65,erro na separacao por endereco,cd
+66,pedido incompleto,cd
+67,operador novo perdido,cd
+68,estoque mal enderecado,cd
+69,picking manual lento,cd
+70,rota refeita por erro,cd
+71,linha parou por falta material,industria
+72,atraso na liberacao da qualidade,industria
+73,maq vibrando demais,industria
+74,check de seguranca falhou,industria
+75,operador sem apoio,industria
+76,excesso de refugos,industria
+77,manutencao demorou p chegar,industria
+78,sensor desalinhado,industria
+79,setup feito errado,industria
+80,linha travou no inicio turno,industria
+81,separacao atrasada por estoque,cd
+82,doca sem equipe suficiente,cd
+83,palete errado carregado,cd
+84,pedido trocado,cd
+85,scanner sem bateria,cd
+86,fila grande p descarregar,cd
+87,retrabalho na rota,cd
+88,sistema nao atualiza estoque,cd
+89,lider so cobra resultado,cd
+90,erro frequente na expedicao,cd
+91,maq superaquecendo,industria
+92,posto desconfortavel,industria
+93,excesso de horas extras,industria
+94,linha 3 parou varias vezes,industria
+95,refeitorio sujo,industria
+96,layout da linha ruim,industria
+97,picking confunde enderecos,cd
+98,estoque lotado,cd
+99,doca mal sinalizada,cd
+100,rota sobrecarregada,cd
+101,ferramenta quebrada temp bugado,industria
+102,sensor bugado do turno da noite,industria
+103,mt erro na conferencia,cd
+104,fila grande no carregamento,cd
+105,doca sem equipe,cd
+106,erro frequente na expedicao hj,cd
+107,picking manual lento,cd
+108,treinamento insuficiente sempre no msm ponto,industria
+109,operador sem apoio pela manha,industria
+110,lider cobra no inicio turno,industria
+111,operador sem apoio mal ajustado,industria
+112,conferencia manual lenta pela manha,cd
+113,linha atrasou do turno da noite,industria
+114,barulho excessivo confusa,industria
+115,linha atrasou desconfortavel,industria
+116,etiqueta ilegivel por estoque,cd
+117,carga pesada,cd
+118,falta treinamento no meio do turno,cd
+119,scanner sem bateria sem bateria,cd
+120,refeitorio horrivel da maq,industria
+121,setup errado no setor b,industria
+122,estoque mal enderecado,cd
+123,sistema n atualiza sem aviso,cd
+124,comida fria por falha eletrica,industria
+125,operador novo perdido,cd
+126,rota atrasou frequente,cd
+127,scanner sem bateria,cd
+128,carga pesada,cd
+129,layout confuso dnv,cd
+130,estoque divergente frequente,cd
+131,ventilacao pessima confusa,industria
+132,check de seguranca falhou puxado demais,industria
+133,estoque mal enderecado,cd
+134,equipe incompleta,cd
+135,palete fora do padrao,cd
+136,erro recorrente no picking sem aviso,cd
+137,rota atrasou,cd
+138,barulho excessivo demais,industria
+139,rota sobrecarregada por endereco,cd
+140,picking confuso,cd
+141,palete fora do padrao,cd
+142,material faltando puxado demais,industria
+143,prensa travou sobrecarregado,industria
+144,mt retrabalho confusa,industria
+145,sensor falhando pela manha,industria
+146,checklist incompleto temp bugado,industria
+147,operador novo perdido,cd
+148,sensor desalinhado sujo,industria
+149,pedido voltou errado no turno,cd
+150,layout confuso pra demanda,cd
+151,muita pressao por meta,cd
+152,mt calor sempre no msm ponto,industria
+153,rota refeita,cd
+154,maq parando sempre no msm ponto,industria
+155,equipe reduzida por falha eletrica,industria
+156,empilhadeira disputada,cd
+157,conferencia manual lenta,cd
+158,separacao atrasada,cd
+159,erro na separacao,cd
+160,check de seguranca falhou mal ajustado,industria
+161,mt calor puxado demais,industria
+162,empilhadeira falhando pra picking,cd
+163,sensor desalinhado demais,industria
+164,check de seguranca falhou desalinhado,industria
+165,erro recorrente no picking,cd
+166,lider n da retorno,cd
+167,fila no almoco p chegar,industria
+168,scanner sem bateria,cd
+169,doca congestionada,cd
+170,lider ausente,cd
+171,etiqueta errada,cd
+172,layout ruim confusa,industria
+173,esteira parou sem apoio,industria
+174,barulho excessivo sobrecarregado,industria
+175,operador novo perdido,cd
+176,inventario errado,cd
+177,fila no almoco na linha 3,industria
+178,setup lento n le direito,industria
+179,picking confunde,cd
+180,operador sobrecarregado no meio do turno,industria
+181,excesso de horas extras por falha eletrica,industria
+182,ferramenta quebrada na linha 2,industria
+183,mt retrabalho feito errado,industria
+184,pedido trocado,cd
+185,picking confunde no turno,cd
+186,layout ruim feito errado,industria
+187,estoque divergente,cd
+188,lider n escuta desconfortavel,industria
+189,ngm resolve sem apoio,industria
+190,prensa travou enorme no almoco,industria
+191,estoque divergente,cd
+192,separacao refeita,cd
+193,linha parada temp bugado,industria
+194,turno curto,cd
+195,maq parando ngm,industria
+196,sistema bugado enderecos,cd
+197,sensor falhando na linha 3,industria
+198,maq vibrando hj,industria
+199,ritmo puxado mal ajustado,industria
+200,lider n da retorno,cd
+201,rota sobrecarregada entrega,cd
+202,mt retrabalho no setor b,industria
+203,mt retrabalho temp bugado,industria
+204,mt erro na conferencia,cd
+205,falha na producao mas n ajuda,industria
+206,inventario errado por estoque,cd
+207,comida fria toda hora,industria
+208,esteira parou hj,industria
+209,meta irreal temp bugado,industria
+210,rota refeita,cd
+211,estoque mal enderecado desnecessario,cd
+212,scanner sem bateria,cd
+213,produto danificado com urgencia,cd
+214,troca de turno confusa hj,industria
+215,retrabalho na rota,cd
+216,reclamacao geral pelo supervisor,industria
+217,linha travou feito errado,industria
+218,check de seguranca falhou da maq,industria
+219,maq velha toda hora,industria
+220,posto mal ajustado na linha 2,industria
+221,etiqueta errada,cd
+222,rota sobrecarregada hj,cd
+223,estoque divergente,cd
+224,pedido incompleto por erro,cd
+225,sensor falhando demais,industria
+226,muita pressao por meta entrega,cd
+227,linha atrasou a tarde,industria
+228,empilhadeira falhando,cd
+229,separacao refeita resultado,cd
+230,operador novo perdido pra demanda,cd
+231,doca sem equipe enderecos,cd
+232,prensa travou na troca de turno,industria
+233,posto desconfortavel desalinhado,industria
+234,picking confuso,cd
+235,conferencia manual lenta,cd
+236,linha atrasou na area 1,industria
+237,scanner n funciona,cd
+238,erro na separacao no armazem 4,cd
+239,rota mal planejada,cd
+240,excesso de horas extras de setup,industria
+241,pressao alta p chegar,industria
+242,erro frequente na expedicao por estoque,cd
+243,falha na producao desalinhado,industria
+244,estoque mal enderecado,cd
+245,rota sobrecarregada,cd
+246,palete errado,cd
+247,erro recorrente no picking sem aviso,cd
+248,conferencia manual lenta,cd
+249,barulho excessivo na troca de turno,industria
+250,doca sem equipe,cd
+251,sensor desalinhado demais,industria
+252,erro recorrente no picking carregado,cd
+253,erro na separacao estoque,cd
+254,meta irreal da maq,industria
+255,separacao lenta,cd
+256,mt deslocamento,cd
+257,maq velha 2x hj,industria
+258,scanner sem bateria,cd
+259,sensor falhando por falha eletrica,industria
+260,sensor falhando pela manha,industria
+261,lider cobra no refeitorio,industria
+262,maq velha a tarde,industria
+263,meta irreal hj,industria
+264,erro recorrente no picking novo operador,cd
+265,setup lento hj,industria
+266,doca congestionada,cd
+267,fila grande no carregamento hj,cd
+268,empilhadeira falhando no armazem 4,cd
+269,estoque divergente novo operador,cd
+270,ventilacao pessima desalinhado,industria
+271,maq vibrando ngm,industria
+272,picking confunde,cd
+273,meta irreal mas n ajuda,industria
+274,separacao atrasada,cd
+275,setup lento por manutencao,industria
+276,rota refeita,cd
+277,doca mal sinalizada,cd
+278,fila grande no carregamento no turno,cd
+279,empilhadeira parada no meio do turno,cd
+280,maq vibrando hj,industria
+281,maq velha p chegar,industria
+282,prensa travou n le direito,industria
+283,posto mal ajustado n le direito,industria
+284,rota mal planejada estoque,cd
+285,sensor bugado puxado demais,industria
+286,posto desconfortavel puxado demais,industria
+287,doca sem organizacao,cd
+288,empilhadeira disputada,cd
+289,erro recorrente no picking,cd
+290,palete quebrado no armazem 4,cd
+291,caminhao atrasado estoque,cd
+292,esteira parou da linha,industria
+293,doca mal sinalizada por erro,cd
+294,estoque mal enderecado,cd
+295,rota sobrecarregada pra picking,cd
+296,comida fria temp bugado,industria
+297,sistema n atualiza no armazem 4,cd
+298,setup errado mas n ajuda,industria
+299,picking confunde,cd
+300,picking confunde por erro,cd
+301,posto mal ajustado na troca de turno,industria
+302,manutencao demorou na linha 2,industria
+303,lider so cobra desnecessario,cd
+304,iluminação ruim na linha 3,industria
+305,palete fora do padrao desnecessario,cd
+306,excesso de refugos feito errado,industria
+307,palete fora do padrao,cd
+308,pedido voltou errado,cd
+309,linha travou da linha,industria
+310,meta irreal pela manha,industria
+311,turno curto resultado,cd
+312,operador sobrecarregado sujo,industria
+313,doca sem organizacao,cd
+314,separacao lenta frequente,cd
+315,estoque desorganizado direito,cd
+316,ritmo puxado confusa,industria
+317,separacao atrasada,cd
+318,inventario errado carregado,cd
+319,pressao alta 2x hj,industria
+320,operador sobrecarregado na area 1,industria
+321,layout confuso,cd
+322,iluminação ruim demais,industria
+323,erro frequente na expedicao,cd
+324,etiqueta ilegivel direito,cd
+325,erro na separacao,cd
+326,retrabalho no carregamento,cd
+327,ventilacao pessima temp bugado,industria
+328,separacao lenta,cd
+329,sensor falhando na troca de turno,industria
+330,operador novo perdido novo operador,cd
+331,palete errado por estoque,cd
+332,linha atrasou na linha 2,industria
+333,ventilacao pessima de setup,industria
+334,setup errado dnv,industria
+335,ngm resolve demais,industria
+336,refeitorio sujo na linha 2,industria
+337,checklist incompleto na linha 2,industria
+338,reentrega frequente no meio do turno,cd
+339,estoque desorganizado,cd
+340,linha parada na area 1,industria
+341,estoque divergente no meio do turno,cd
+342,carga pesada,cd
+343,ritmo puxado no refeitorio,industria
+344,muita pressao por meta resultado,cd
+345,conferencia manual lenta,cd
+346,ngm resolve demais,industria
+347,empilhadeira falhando,cd
+348,sensor desalinhado no refeitorio,industria
+349,inventario errado,cd
+350,manutencao demorou extras,industria
+351,linha atrasou dnv,industria
+352,ritmo puxado 2x hj,industria
+353,palete errado dnv,cd
+354,caminhao atrasado frequente,cd
+355,operador novo perdido sem aviso,cd
+356,lider n escuta pela manha,industria
+357,reentrega frequente no armazem 4,cd
+358,sensor bugado de setup,industria
+359,linha travou da linha,industria
+360,pedido incompleto,cd
+361,separacao atrasada enderecos,cd
+362,rota mal planejada por erro,cd
+363,mt deslocamento,cd
+364,sistema bugado,cd
+365,doca mal sinalizada enderecos,cd
+366,maq parando mal ajustado,industria
+367,linha parada e barulho,industria
+368,falta caixa pela manha,cd
+369,ferramenta quebrada e barulho,industria
+370,pedido incompleto,cd
+371,mt retrabalho temp bugado,industria
+372,maq parou de setup,industria
+373,falha na producao pela manha,industria
+374,maq parou temp bugado,industria
+375,mt retrabalho falhou,industria
+376,palete fora do padrao,cd
+377,maq parou confusa,industria
+378,etiqueta errada,cd
+379,operador novo perdido,cd
+380,meta irreal toda hora,industria
+381,rota refeita,cd
+382,reclamacao geral toda hora,industria
+383,separacao refeita,cd
+384,rota refeita,cd
+385,estoque mal enderecado direito,cd
+386,pressao alta na linha 2,industria
+387,doca mal sinalizada por erro,cd
+388,manutencao demorou enorme no almoco,industria
+389,checklist incompleto hj,industria
+390,equipe reduzida enorme no almoco,industria
+391,refeitorio sujo feito errado,industria
+392,reclamacao geral mal ajustado,industria
+393,falta espaco enderecos,cd
+394,separacao atrasada enderecos,cd
+395,lider so cobra pela manha,cd
+396,excesso de refugos de refugos,industria
+397,palete quebrado por endereco,cd
+398,linha travou hj,industria
+399,ngm resolve no inicio turno,industria
+400,meta irreal temp bugado,industria
+401,erro na separacao,cd
+402,rota atrasou,cd
+403,estoque mal enderecado sem bateria,cd
+404,retrabalho na rota,cd
+405,carga pesada,cd
+406,ambiente pesado de setup,industria
+407,operador sobrecarregado mal ajustado,industria
+408,produto danificado enderecos,cd
+409,lider n escuta temp bugado,industria
+410,doca mal sinalizada no turno,cd
+411,empilhadeira falhando,cd
+412,etiqueta errada,cd
+413,iluminação ruim no setor b,industria
+414,fila grande p descarregar sem bateria,cd
+415,lider ausente hj,cd
+416,sensor desalinhado depois do turno,industria
+417,empilhadeira disputada,cd
+418,maq parando dnv,industria
+419,scanner n funciona manual,cd
+420,palete fora do padrao no meio do turno,cd
+421,layout confuso,cd
+422,setup lento p chegar,industria
+423,material faltando da linha,industria
+424,sistema bugado sem aviso,cd
+425,manutencao demorou na troca de turno,industria
+426,falha na producao sempre no msm ponto,industria
+427,rota sobrecarregada,cd
+428,reentrega frequente no armazem 4,cd
+429,treinamento insuficiente falhou,industria
+430,iluminação ruim 2x hj,industria
+431,erro recorrente no picking no armazem 4,cd
+432,picking confunde,cd
+433,falha na producao no meio do turno,industria
+434,operador novo perdido,cd
+435,erro recorrente no picking,cd
+436,sensor desalinhado no meio do turno,industria
+437,pressao alta no refeitorio,industria
+438,operador sem apoio na linha 3,industria
+439,doca mal sinalizada,cd
+440,falta caixa,cd
+441,erro recorrente no picking,cd
+442,fila grande no carregamento,cd
+443,ferramenta quebrada n le direito,industria
+444,check de seguranca falhou mas n ajuda,industria
+445,esteira parou a tarde,industria
+446,palete errado estoque,cd
+447,mt retrabalho no refeitorio,industria
+448,empilhadeira falhando sem bateria,cd
+449,equipe reduzida sobrecarregado,industria
+450,palete quebrado,cd
+451,estoque divergente direito,cd
+452,erro recorrente no picking,cd
+453,treinamento insuficiente ngm,industria
+454,iluminação ruim sujo,industria
+455,falta caixa,cd
+456,rota mal planejada,cd
+457,scanner sem bateria,cd
+458,layout ruim sem apoio,industria
+459,maq vibrando a tarde,industria
+460,fila grande no carregamento dnv,cd
+461,sistema lento frequente,cd
+462,lider n escuta no inicio turno,industria
+463,erro frequente na expedicao,cd
+464,sistema caiu pela manha,cd
+465,reclamacao geral na troca de turno,industria
+466,falha na producao n le direito,industria
+467,scanner sem bateria no armazem 4,cd
+468,ambiente pesado feito errado,industria
+469,erro frequente na expedicao,cd
+470,mt erro na conferencia no turno,cd
+471,estoque divergente,cd
+472,caminhao atrasado,cd
+473,muita pressao por meta por estoque,cd
+474,linha parada da linha,industria
+475,erro frequente na expedicao,cd
+476,layout ruim da maq,industria
+477,pressao alta da maq,industria
+478,lider n escuta toda hora,industria
+479,maq parando ngm,industria
+480,pressao alta por manutencao,industria
+481,iluminação ruim falhou,industria
+482,treinamento insuficiente no setor b,industria
+483,mt calor na linha 3,industria
+484,scanner sem bateria entrega,cd
+485,palete fora do padrao,cd
+486,checklist incompleto da maq,industria
+487,picking confuso suficiente,cd
+488,excesso de refugos no inicio turno,industria
+489,sistema caiu,cd
+490,lider n escuta dnv,industria
+491,sensor bugado sempre no msm ponto,industria
+492,picking confunde,cd
+493,picking confunde,cd
+494,sistema bugado dnv,cd
+495,excesso de refugos sempre no msm ponto,industria
+496,lider n escuta 2x hj,industria
+497,rota sobrecarregada,cd
+498,material faltando sujo,industria
+499,pedido trocado por estoque,cd
+500,empilhadeira falhando pela manha,cd
+501,falta caixa frequente,cd
+502,empilhadeira falhando,cd
+503,scanner sem bateria resultado,cd
+504,rota sobrecarregada pra picking,cd
+505,fila grande no carregamento,cd
+506,equipe incompleta resultado,cd
+507,excesso de refugos na linha 3,industria
+508,produto danificado,cd
+509,meta irreal dnv,industria
+510,manutencao demorou no setor b,industria
+511,setup lento na linha 2,industria
+512,separacao refeita por estoque,cd
+513,ambiente pesado desalinhado,industria
+514,layout confuso,cd
+515,mt retrabalho dnv,industria
+516,barulho excessivo sem aviso,industria
+517,mt retrabalho da maq,industria
+518,equipe reduzida sem apoio,industria
+519,retrabalho no carregamento,cd
+520,rota refeita,cd
+521,estoque desorganizado hj,cd
+522,carga pesada,cd
+523,lider n escuta 2x hj,industria
+524,empilhadeira falhando sem bateria,cd
+525,separacao refeita,cd
+526,lider cobra no inicio turno,industria
+527,rota atrasou enderecos,cd
+528,muita pressao por meta direito,cd
+529,doca sem organizacao no turno,cd
+530,pressao alta de refugos,industria
+531,refeitorio sujo por falha eletrica,industria
+532,refeitorio horrivel na troca de turno,industria
+533,scanner sem bateria,cd
+534,operador novo perdido,cd
+535,linha atrasou depois do turno,industria
+536,checklist incompleto n le direito,industria
+537,doca sem equipe no turno,cd
+538,doca congestionada estoque,cd
+539,estoque lotado resultado,cd
+540,rota sobrecarregada,cd
+541,rota sobrecarregada no meio do turno,cd
+542,comida fria no setor b,industria
+543,separacao lenta,cd
+544,pressao alta de setup,industria
+545,retrabalho na rota pra picking,cd
+546,setup errado no inicio turno,industria
+547,posto desconfortavel sobrecarregado,industria
+548,estoque divergente,cd
+549,ferramenta quebrada a tarde,industria
+550,refeitorio sujo de setup,industria
+551,esteira parou do turno da noite,industria
+552,sensor falhando sem aviso,industria
+553,empilhadeira falhando manual,cd
+554,picking confunde,cd
+555,rota refeita,cd
+556,sensor desalinhado demais,industria
+557,empilhadeira disputada,cd
+558,empilhadeira falhando enderecos,cd
+559,picking manual lento,cd
+560,pressao alta puxado demais,industria
+561,empilhadeira disputada entrega,cd
+562,posto mal ajustado demais,industria
+563,treinamento insuficiente hj,industria
+564,reclamacao geral de setup,industria
+565,reentrega frequente no turno,cd
+566,setup errado de setup,industria
+567,fila grande p descarregar direito,cd
+568,troca de turno confusa no meio do turno,industria
+569,erro frequente na expedicao,cd
+570,sistema bugado,cd
+571,troca de turno confusa desalinhado,industria
+572,manutencao demorou n le direito,industria
+573,checklist incompleto no meio do turno,industria
+574,layout confuso direito,cd
+575,separacao atrasada suficiente,cd
+576,maq vibrando sem aviso,industria
+577,falta treinamento,cd
+578,falta treinamento,cd
+579,sistema bugado com urgencia,cd
+580,lider n escuta e barulho,industria
+581,sensor desalinhado no inicio turno,industria
+582,estoque desorganizado,cd
+583,mt retrabalho na linha 3,industria
+584,reentrega frequente enderecos,cd
+585,rota sobrecarregada pra picking,cd
+586,maq vibrando de setup,industria
+587,empilhadeira parada hj,cd
+588,sensor falhando pela manha,industria
+589,treinamento insuficiente no meio do turno,industria
+590,rota refeita enderecos,cd
+591,pressao alta pelo supervisor,industria
+592,erro recorrente no picking,cd
+593,separacao lenta entrega,cd
+594,doca sem organizacao estoque,cd
+595,pedido voltou errado,cd
+596,ngm resolve a tarde,industria
+597,retrabalho na rota,cd
+598,excesso de refugos extras,industria
+599,lider n escuta no refeitorio,industria
+600,mt retrabalho desconfortavel,industria
+601,lider cobra no refeitorio,industria
+602,lider so cobra,cd
+603,lider ausente pra demanda,cd
+604,empilhadeira disputada,cd
+605,mt calor no refeitorio,industria
+606,separacao atrasada,cd
+607,mt erro na conferencia com urgencia,cd
+608,sistema bugado,cd
+609,ventilacao pessima ngm,industria
+610,doca sem organizacao,cd
+611,scanner n funciona com urgencia,cd
+612,troca de turno confusa depois do turno,industria
+613,lider n escuta demais,industria
+614,refeitorio horrivel e barulho,industria
+615,operador sobrecarregado na troca de turno,industria
+616,rota sobrecarregada,cd
+617,rota atrasou resultado,cd
+618,separacao atrasada,cd
+619,sensor desalinhado puxado demais,industria
+620,ritmo puxado sujo,industria
+621,refeitorio horrivel na area 1,industria
+622,equipe incompleta hj,cd
+623,linha atrasou no inicio turno,industria
+624,reclamacao geral na linha 3,industria
+625,troca de turno confusa na linha 3,industria
+626,estoque desorganizado,cd
+627,pedido trocado manual,cd
+628,carga pesada dnv,cd
+629,checklist incompleto e barulho,industria
+630,ngm resolve de refugos,industria
+631,equipe incompleta hj,cd
+632,doca congestionada dnv,cd
+633,fila grande p descarregar hj,cd
+634,erro frequente na expedicao por estoque,cd
+635,erro recorrente no picking pra picking,cd
+636,mt erro na conferencia,cd
+637,lider ausente,cd
+638,fila grande no carregamento,cd
+639,dor nas costas pelo supervisor,industria
+640,lider ausente,cd
+641,posto desconfortavel da linha,industria
+642,maq vibrando mas n ajuda,industria
+643,reclamacao geral temp bugado,industria
+644,sensor bugado sem aviso,industria
+645,pedido voltou errado hj,cd
+646,esteira parou extras,industria
+647,etiqueta ilegivel,cd
+648,maq parando puxado demais,industria
+649,maq parando mal ajustado,industria
+650,linha atrasou no setor b,industria
+651,setup lento puxado demais,industria
+652,lider cobra hj,industria
+653,linha parada na linha 3,industria
+654,empilhadeira parada,cd
+655,check de seguranca falhou desconfortavel,industria
+656,ventilacao pessima de setup,industria
+657,check de seguranca falhou falhou,industria
+658,ritmo puxado dnv,industria
+659,sensor bugado pelo supervisor,industria
+660,ambiente pesado sobrecarregado,industria
+661,ritmo puxado hj,industria
+662,sensor bugado no setor b,industria
+663,layout confuso,cd
+664,equipe reduzida p chegar,industria
+665,excesso de horas extras na troca de turno,industria
+666,retrabalho no carregamento carregado,cd
+667,etiqueta errada dnv,cd
+668,setup errado 2x hj,industria
+669,dor nas costas na prensa,industria
+670,posto desconfortavel mas n ajuda,industria
+671,maq parou desconfortavel,industria
+672,picking confunde,cd
+673,mt erro na conferencia,cd
+674,rota atrasou enderecos,cd
+675,reentrega frequente,cd
+676,ritmo puxado sem apoio,industria
+677,refeitorio horrivel pela manha,industria
+678,lider cobra mas n ajuda,industria
+679,mt erro na conferencia por erro,cd
+680,prensa travou desconfortavel,industria
+681,troca de turno confusa na prensa,industria
+682,lider n escuta falhou,industria
+683,meta irreal de refugos,industria
+684,excesso de refugos demais,industria
+685,rota mal planejada hj,cd
+686,lider n da retorno pela manha,cd
+687,esteira parou depois do turno,industria
+688,operador cansado enderecos,cd
+689,equipe incompleta hj,cd
+690,palete quebrado,cd
+691,falta treinamento,cd
+692,check de seguranca falhou temp bugado,industria
+693,ngm resolve a tarde,industria
+694,empilhadeira disputada,cd
+695,sistema bugado,cd
+696,pressao alta de refugos,industria
+697,layout ruim na linha 3,industria
+698,carga pesada hj,cd
+699,posto mal ajustado toda hora,industria
+700,setup errado dnv,industria
+701,sensor n le na prensa,industria
+702,estoque divergente,cd
+703,empilhadeira parada,cd
+704,operador sobrecarregado sem apoio,industria
+705,sensor desalinhado enorme no almoco,industria
+706,pedido incompleto,cd
+707,lider n da retorno,cd
+708,operador cansado sem aviso,cd
+709,etiqueta ilegivel no armazem 4,cd
+710,posto desconfortavel puxado demais,industria
+711,esteira parou na troca de turno,industria
+712,linha atrasou extras,industria
+713,falha na producao no meio do turno,industria
+714,pedido incompleto,cd
+715,estoque divergente por endereco,cd
+716,mt erro na conferencia,cd
+717,retrabalho no carregamento,cd
+718,sensor bugado depois do turno,industria
+719,mt deslocamento,cd
+720,maq vibrando na linha 3,industria
+721,conferencia manual lenta,cd
+722,reentrega frequente,cd
+723,operador cansado,cd
+724,lider cobra dnv,industria
+725,prensa travou por manutencao,industria
+726,linha travou sujo,industria
+727,estoque divergente,cd
+728,ventilacao pessima mas n ajuda,industria
+729,posto desconfortavel na area 1,industria
+730,picking confunde sem aviso,cd
+731,palete quebrado,cd
+732,sensor falhando no meio do turno,industria
+733,doca sem equipe sem aviso,cd
+734,pressao alta na prensa,industria
+735,scanner n funciona desnecessario,cd
+736,checklist incompleto e barulho,industria
+737,empilhadeira falhando manual,cd
+738,layout ruim temp bugado,industria
+739,sistema caiu enderecos,cd
+740,excesso de horas extras ngm,industria
+741,material faltando no meio do turno,industria
+742,empilhadeira parada,cd
+743,sistema n atualiza,cd
+744,sistema bugado por erro,cd
+745,refeitorio horrivel e barulho,industria
+746,mt deslocamento,cd
+747,esteira parou hj,industria
+748,pedido incompleto pela manha,cd
+749,pedido trocado,cd
+750,rota mal planejada,cd
+751,reclamacao geral enorme no almoco,industria
+752,separacao refeita,cd
+753,layout ruim sem aviso,industria
+754,operador novo perdido,cd
+755,sistema n atualiza,cd
+756,iluminação ruim hj,industria
+757,doca congestionada sem bateria,cd
+758,doca sem organizacao entrega,cd
+759,estoque mal enderecado,cd
+760,picking confuso,cd
+761,sistema bugado direito,cd
+762,treinamento insuficiente de setup,industria
+763,lider cobra dnv,industria
+764,scanner n funciona,cd
+765,posto desconfortavel demais,industria
+766,empilhadeira falhando por erro,cd
+767,scanner n funciona sem bateria,cd
+768,inventario errado por erro,cd
+769,rota mal planejada pra demanda,cd
+770,mt deslocamento,cd
+771,sensor desalinhado mas n ajuda,industria
+772,mt calor temp bugado,industria
+773,treinamento insuficiente sempre no msm ponto,industria
+774,operador cansado,cd
+775,falta treinamento,cd
+776,carga pesada por erro,cd
+777,maq parou n le direito,industria
+778,meta irreal toda hora,industria
+779,pressao alta extras,industria
+780,retrabalho no carregamento dnv,cd
+781,picking confunde dnv,cd
+782,checklist incompleto na prensa,industria
+783,linha parada sujo,industria
+784,operador cansado no meio do turno,cd
+785,palete quebrado,cd
+786,sensor desalinhado confusa,industria
+787,lider so cobra novo operador,cd
+788,layout confuso,cd
+789,meta irreal da maq,industria
+790,lider n da retorno pra picking,cd
+791,reclamacao geral demais,industria
+792,doca sem organizacao,cd
+793,palete fora do padrao suficiente,cd
+794,estoque desorganizado,cd
+795,falha na producao temp bugado,industria
+796,maq parou pela manha,industria
+797,mt deslocamento manual,cd
+798,estoque mal enderecado frequente,cd
+799,equipe incompleta,cd
+800,dor nas costas mal ajustado,industria
+801,linha parada dnv,industria
+802,turno curto,cd
+803,ferramenta quebrada hj,industria
+804,erro frequente na expedicao no meio do turno,cd
+805,check de seguranca falhou pela manha,industria
+806,palete fora do padrao,cd
+807,empilhadeira parada pra picking,cd
+808,excesso de refugos no setor b,industria
+809,equipe reduzida da linha,industria
+810,retrabalho no carregamento suficiente,cd
+811,caminhao atrasado por erro,cd
+812,rota mal planejada carregado,cd
+813,estoque divergente carregado,cd
+814,retrabalho no carregamento,cd
+815,layout ruim hj,industria
+816,pedido trocado,cd
+817,material faltando hj,industria
+818,posto desconfortavel sem apoio,industria
+819,maq velha sobrecarregado,industria
+820,palete fora do padrao,cd
+821,linha parada demais,industria
+822,troca de turno confusa puxado demais,industria
+823,barulho excessivo demais,industria
+824,maq parou desalinhado,industria
+825,separacao lenta novo operador,cd
+826,doca mal sinalizada no turno,cd
+827,linha parada na troca de turno,industria
+828,falta treinamento,cd
+829,rota refeita,cd
+830,erro na separacao,cd
+831,falta treinamento dnv,cd
+832,scanner sem bateria manual,cd
+833,turno curto,cd
+834,sistema caiu hj,cd
+835,doca sem equipe,cd
+836,sensor falhando da linha,industria
+837,lider cobra sem aviso,industria
+838,mt erro na conferencia,cd
+839,lider n da retorno enderecos,cd
+840,doca mal sinalizada,cd
+841,ambiente pesado sempre no msm ponto,industria
+842,linha parada confusa,industria
+843,posto mal ajustado no refeitorio,industria
+844,falha na producao mal ajustado,industria
+845,mt calor da linha,industria
+846,equipe reduzida a tarde,industria
+847,barulho excessivo mas n ajuda,industria
+848,operador sobrecarregado sobrecarregado,industria
+849,falta espaco resultado,cd
+850,linha atrasou na linha 2,industria
+851,posto mal ajustado hj,industria
+852,estoque lotado,cd
+853,etiqueta errada,cd
+854,barulho excessivo na linha 2,industria
+855,sistema bugado,cd
+856,sensor falhando no meio do turno,industria
+857,etiqueta errada sem aviso,cd
+858,linha atrasou hj,industria
+859,linha travou na prensa,industria
+860,mt retrabalho pela manha,industria
+861,refeitorio horrivel sujo,industria
+862,palete fora do padrao,cd
+863,equipe reduzida na troca de turno,industria
+864,equipe reduzida p chegar,industria
+865,lider n escuta na area 1,industria
+866,equipe reduzida 2x hj,industria
+867,esteira parou sempre no msm ponto,industria
+868,sistema lento hj,cd
+869,esteira parou por manutencao,industria
+870,muita pressao por meta,cd
+871,excesso de refugos temp bugado,industria
+872,picking manual lento desnecessario,cd
+873,falha na producao da maq,industria
+874,falta treinamento sem bateria,cd
+875,equipe reduzida da maq,industria
+876,rota mal planejada manual,cd
+877,carga pesada,cd
+878,check de seguranca falhou mas n ajuda,industria
+879,lider n escuta 2x hj,industria
+880,linha travou dnv,industria
+881,meta irreal mal ajustado,industria
+882,rota atrasou,cd
+883,setup lento extras,industria
+884,rota sobrecarregada,cd
+885,lider cobra no refeitorio,industria
+886,empilhadeira disputada,cd
+887,scanner sem bateria,cd
+888,fila no almoco puxado demais,industria
+889,fila grande no carregamento,cd
+890,ambiente pesado do turno da noite,industria
+891,lider n da retorno resultado,cd
+892,lider ausente pra picking,cd
+893,retrabalho no carregamento direito,cd
+894,check de seguranca falhou p chegar,industria
+895,falta treinamento suficiente,cd
+896,operador sobrecarregado p chegar,industria
+897,lider n escuta dnv,industria
+898,comida fria ngm,industria
+899,ferramenta quebrada sem aviso,industria
+900,ventilacao pessima no setor b,industria
+901,erro recorrente no picking,cd
+902,dor nas costas demais,industria
+903,setup lento confusa,industria
+904,esteira parou de refugos,industria
+905,sensor bugado dnv,industria
+906,lider n da retorno,cd
+907,reentrega frequente,cd
+908,separacao refeita,cd
+909,fila grande no carregamento pra picking,cd
+910,pedido trocado,cd
+911,lider cobra a tarde,industria
+912,excesso de refugos p chegar,industria
+913,carga pesada,cd
+914,produto danificado,cd
+915,pedido trocado,cd
+916,sistema n atualiza,cd
+917,ferramenta quebrada demais,industria
+918,ngm resolve sobrecarregado,industria
+919,excesso de refugos sujo,industria
+920,meta irreal a tarde,industria
+921,pedido trocado frequente,cd
+922,material faltando pelo supervisor,industria
+923,check de seguranca falhou desconfortavel,industria
+924,operador novo perdido,cd
+925,manutencao demorou no refeitorio,industria
+926,lider ausente por estoque,cd
+927,falta treinamento no turno,cd
+928,troca de turno confusa temp bugado,industria
+929,refeitorio sujo sem aviso,industria
+930,linha atrasou sobrecarregado,industria
+931,iluminação ruim temp bugado,industria
+932,maq velha depois do turno,industria
+933,sensor desalinhado desconfortavel,industria
+934,separacao lenta,cd
+935,falta espaco no turno,cd
+936,etiqueta ilegivel,cd
+937,iluminação ruim dnv,industria
+938,sensor bugado hj,industria
+939,produto danificado novo operador,cd
+940,meta irreal desalinhado,industria
+941,doca sem organizacao dnv,cd
+942,layout confuso frequente,cd
+943,ambiente pesado na troca de turno,industria
+944,excesso de horas extras confusa,industria
+945,ritmo puxado hj,industria
+946,ritmo puxado na area 1,industria
+947,posto desconfortavel falhou,industria
+948,maq velha da linha,industria
+949,treinamento insuficiente na linha 2,industria
+950,retrabalho no carregamento,cd
+951,lider so cobra,cd
+952,sistema n atualiza manual,cd
+953,ngm resolve feito errado,industria
+954,sistema caiu no meio do turno,cd
+955,operador cansado pela manha,cd
+956,scanner n funciona,cd
+957,conferencia manual lenta,cd
+958,separacao refeita no turno,cd
+959,picking confunde,cd
+960,muita pressao por meta manual,cd
+961,rota atrasou manual,cd
+962,separacao atrasada entrega,cd
+963,barulho excessivo do turno da noite,industria
+964,caminhao atrasado enderecos,cd
+965,pedido voltou errado,cd
+966,sensor desalinhado enorme no almoco,industria
+967,falta treinamento no armazem 4,cd
+968,lider ausente,cd
+969,muita pressao por meta,cd
+970,posto mal ajustado hj,industria
+971,prensa travou desalinhado,industria
+972,empilhadeira falhando,cd
+973,scanner n funciona,cd
+974,fila grande no carregamento manual,cd
+975,barulho excessivo no refeitorio,industria
+976,iluminação ruim do turno da noite,industria
+977,iluminação ruim enorme no almoco,industria
+978,estoque mal enderecado,cd
+979,conferencia manual lenta pra picking,cd
+980,setup errado dnv,industria
+981,picking confuso,cd
+982,ferramenta quebrada depois do turno,industria
+983,setup errado na prensa,industria
+984,carga pesada no turno,cd
+985,carga pesada manual,cd
+986,erro recorrente no picking,cd
+987,maq parando no setor b,industria
+988,material faltando da linha,industria
+989,linha parada desalinhado,industria
+990,maq parando falhou,industria
+991,maq parando hj,industria
+992,sensor desalinhado p chegar,industria
+993,separacao atrasada,cd
+994,muita pressao por meta no meio do turno,cd
+995,refeitorio horrivel no meio do turno,industria
+996,erro frequente na expedicao,cd
+997,ferramenta quebrada feito errado,industria
+998,sensor desalinhado pelo supervisor,industria
+999,rota sobrecarregada no meio do turno,cd
+1000,sensor desalinhado enorme no almoco,industria
