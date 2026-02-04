@@ -1,5 +1,5 @@
-import sys
-import pandas as pd
+import csv
+from collections import Counter, defaultdict
 import ollama
 from pathlib import Path
 
@@ -7,19 +7,7 @@ from pathlib import Path
 
 current_dir = Path(__file__).resolve().parent
 e1_dir = current_dir.parent / "E1_cluster"
-sys.path.append(str(e1_dir))
-
-try:
-    import run_bertopic_experiment as e1
-except ImportError:
-    print(f"❌ Erro: Não foi possível encontrar 'run_bertopic_experiment.py' em {e1_dir}")
-    sys.exit(1)
-
-
-from bertopic import BERTopic
-from sentence_transformers import SentenceTransformer
-from hdbscan import HDBSCAN
-from umap import UMAP
+e1_output_csv = e1_dir / "output_bertopic_clusters.csv"
 
 # ================= CONFIGURAÇÃO OLLAMA =================
 OLLAMA_MODEL = "llama3:latest" 
@@ -62,71 +50,55 @@ Ação: [Uma ação prática sugerida]
 
 def main():
 
-    print("📦 Carregando dataset e stopwords do E1...")
-    
-    dataset_path = e1.DEFAULT_DATASET
-    if not dataset_path.exists():
-        dataset_path = e1_dir.parent / "E0_dataset_goldset" / "dataset.csv"
-    
-    df = e1.load_dataset(dataset_path)
-    stopwords = e1.load_stopwords(e1.DEFAULT_STOPWORDS)
-    
-    texts = df["texto"].astype(str).str.strip().str.lower().tolist()
-    
-    print(f"🧠 Treinando BERTopic com modelo: {e1.EMBEDDING_MODEL_NAME}")
-    
-    e1.set_seed(e1.SEED_PRIMARY)
-    
-    hf_model = SentenceTransformer(e1.EMBEDDING_MODEL_NAME)
-    
-    # Configuração idêntica ao seu E1 (hardcoded aqui ou puxada se fossem variaveis)
-    hdbscan_model = HDBSCAN(min_cluster_size=3, min_samples=1, cluster_selection_epsilon=0.5, metric='euclidean')
-    umap_model = UMAP(n_neighbors=5, n_components=3, min_dist=0.0, metric='cosine')
-    
-    topic_model = BERTopic(
-        embedding_model=hf_model,
-        language=None,
-        hdbscan_model=hdbscan_model,
-        umap_model=umap_model,
-        calculate_probabilities=False,
-        verbose=True
-    )
-    
-    topics, _ = topic_model.fit_transform(texts)
-    df['topic'] = topics # Salva o tópico no dataframe para consulta
+    print("📦 Carregando clusters já gerados no E1 (sem re-treinar)...")
+
+    # Usamos o output consolidado do E1 para evitar re-treinar o BERTopic.
+    # O CSV já contém o topic_id e termos principais por relato.
+    if not e1_output_csv.exists():
+        raise FileNotFoundError(f"❌ CSV do E1 não encontrado em {e1_output_csv}")
+
+    clusters = defaultdict(list)
+    topic_terms = defaultdict(list)
+    topic_sectors = defaultdict(list)
+
+    with e1_output_csv.open(newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            topic_id = int(row["topic_id"])
+            texto = row["texto"].strip()
+            setor = row.get("setor", "N/A").strip() or "N/A"
+            terms = [t.strip() for t in row.get("top_terms", "").split(",") if t.strip()]
+
+            clusters[topic_id].append(texto)
+            topic_terms[topic_id].append(terms)
+            topic_sectors[topic_id].append(setor)
 
     # 3. Loop de Interpretação com Ollama
     print(f"\n⚡ Iniciando inferência no {OLLAMA_MODEL}...")
-    
-    info_topics = topic_model.get_topic_info()
-    
+
     # Arquivo de saída na pasta E2
     output_file = Path("relatorio_ia_generativa.md")
     
     with open(output_file, "w", encoding="utf-8") as f:
         f.write("# Relatório de Interpretação Automática (Llama 3)\n\n")
         
-        for index, row in info_topics.iterrows():
-            topic_id = row['Topic']
-            if topic_id == -1: continue # Pula ruído
-                
-            # Coleta dados
-            termos = [t[0] for t in topic_model.get_topic(topic_id)[:6]]
-            
-            # Pega documentos representativos
-            docs = topic_model.get_representative_docs(topic_id)
-            # Se faltar representativos, completa com aleatórios
-            if len(docs) < 5:
-                extras = df[df['topic'] == topic_id]['texto'].head(5).tolist()
-                docs = list(set(docs + extras))
-            docs = docs[:8] # Limita a 8 exemplos
-            
-            setor = df[df['topic'] == topic_id]['setor'].mode()[0] if 'setor' in df.columns else "N/A"
-            stats = {'count': row['Count'], 'sector': setor}
-            
-            # Chama IA
-            resultado = gerar_interpretacao_ollama(topic_id, termos, docs, stats)
-            
+        for topic_id in sorted(clusters.keys()):
+            if topic_id == -1:
+                continue  # Pula ruído
+
+            exemplos = clusters[topic_id][:8]  # Limita a 8 exemplos
+
+            # Consolida termos principais a partir do CSV do E1
+            termos_flat = [t for terms in topic_terms[topic_id] for t in terms]
+            termos = [t for t, _ in Counter(termos_flat).most_common(6)]
+
+            setor_counts = Counter(topic_sectors[topic_id])
+            setor = setor_counts.most_common(1)[0][0] if setor_counts else "N/A"
+            stats = {'count': len(clusters[topic_id]), 'sector': setor}
+
+            # Chama IA com dados já prontos do E1
+            resultado = gerar_interpretacao_ollama(topic_id, termos, exemplos, stats)
+
             # Escreve no arquivo e na tela
             bloco = f"## Tópico {topic_id}\n{resultado}\n\n---\n"
             print(bloco)
