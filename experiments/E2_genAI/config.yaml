@@ -1,0 +1,29 @@
+
+## Configuração do experimento (`config.yaml`)
+
+source:
+  e1_csv_path: "../E1_cluster/output_bertopic_clusters.csv"
+
+aggregation:
+  drop_noise: true
+  min_relato_len: 8
+  examples_per_topic: 8
+  top_terms_k: 8
+  sample_method: "hash"   # "hash" (determinístico) ou "head"
+
+llm:
+  provider: "ollama"
+  model: "llama3:latest"
+  timeout_sec: 120
+  retries: 1
+
+rules:
+  themes_target: 10
+  themes_min: 8
+  themes_max: 12
+  emergent_min_count: 5
+  emergent_min_share: 0.02
+
+run:
+  outputs_base_dir: "./outputs/runs"
+  prompt_version: "e2_v1"
