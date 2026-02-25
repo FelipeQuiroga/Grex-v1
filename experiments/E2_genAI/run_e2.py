@@ -86,7 +86,7 @@ def run_pipeline(config_path: str | Path) -> int:
     status = "SUCCESS" if not errors else "FAILED"
     if validated:
         write_json(run_dir / "result.json", validated)
-        metrics = compute_metrics(validated, topics_payload)
+        metrics = compute_metrics(validated, topics_payload, config["rules"])
         write_json(run_dir / "metrics.json", metrics)
     if errors:
         write_text(run_dir / "validation_errors.txt", json.dumps(errors, indent=2))

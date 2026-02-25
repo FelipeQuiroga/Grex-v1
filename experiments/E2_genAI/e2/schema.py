@@ -4,19 +4,8 @@ import json
 from typing import Iterable
 
 
-VALID_CONFIDENCE = {"alta", "media", "baixa"}
+VALID_CONFIDENCE = {"HIGH", "MEDIUM", "LOW"}
 VALID_STATUS = {"OK", "REVISAR", "EMERGENTE"}
-
-
-def _count_themes(taxonomy: dict) -> int:
-    themes = taxonomy.get("themes", [])
-    unique = {(theme.get("macrotheme"), theme.get("theme")) for theme in themes}
-    return len([pair for pair in unique if all(pair)])
-
-
-def _extract_emergent_names(payload: dict) -> set[str]:
-    emergent = payload.get("emergent_themes", [])
-    return {item.get("name", "") for item in emergent if item.get("name")}
 
 
 def parse_json(raw: str) -> tuple[dict | None, list[str]]:
@@ -24,7 +13,16 @@ def parse_json(raw: str) -> tuple[dict | None, list[str]]:
         payload = json.loads(raw)
         return payload, []
     except json.JSONDecodeError as exc:
-        return None, [f"JSON inválido: {exc}"]
+        return None, [f"JSON invalido: {exc}"]
+
+
+def _as_int_topic_id(value: object) -> tuple[int | None, str | None]:
+    if isinstance(value, bool):
+        return None, "topic_id invalido: boolean nao e aceito."
+    try:
+        return int(value), None
+    except (TypeError, ValueError):
+        return None, f"topic_id invalido: {value!r}"
 
 
 def validate_payload(
@@ -37,58 +35,86 @@ def validate_payload(
     if not isinstance(payload, dict):
         return ["Payload deve ser um objeto JSON."]
 
-    taxonomy = payload.get("taxonomy")
-    if not isinstance(taxonomy, dict):
-        errors.append("Campo taxonomy ausente ou inválido.")
+    allowed_top_level = {"mappings"}
+    top_level_keys = set(payload.keys())
+    extra_top_level = sorted(top_level_keys - allowed_top_level)
+    if extra_top_level:
+        errors.append(
+            f"Campos de topo nao permitidos: {extra_top_level}. Use apenas 'mappings'."
+        )
 
     mappings = payload.get("mappings")
     if not isinstance(mappings, list):
-        errors.append("Campo mappings ausente ou inválido.")
-
-    emergent = payload.get("emergent_themes")
-    if emergent is None:
-        errors.append("Campo emergent_themes ausente.")
-
-    if errors:
+        errors.append("Campo mappings ausente ou invalido.")
         return errors
 
-    themes_count = _count_themes(taxonomy)
-    if themes_count < rules["themes_min"] or themes_count > rules["themes_max"]:
-        errors.append(
-            f"Quantidade de temas ({themes_count}) fora do intervalo "
-            f"{rules['themes_min']}–{rules['themes_max']}."
-        )
+    macro_taxonomy = rules["macro_taxonomy"]
+    forbid_new_macrothemes = bool(rules.get("forbid_new_macrothemes", True))
+    thresholds = rules.get("thresholds", {})
+    confidence_low_threshold = thresholds.get("confidence_low_threshold", "LOW")
+    allowed_macrothemes = set(macro_taxonomy)
 
-    mapping_ids = []
+    expected_keys = {"topic_id", "macro_theme", "confidence", "status"}
+    mapping_ids: list[int] = []
     for mapping in mappings:
         if not isinstance(mapping, dict):
             errors.append("Cada mapping deve ser um objeto JSON.")
             continue
-        if mapping.get("confidence") not in VALID_CONFIDENCE:
-            errors.append(f"Confiança inválida para topic_id {mapping.get('topic_id')}.")
-        if mapping.get("status") not in VALID_STATUS:
-            errors.append(f"Status inválido para topic_id {mapping.get('topic_id')}.")
-        if "topic_id" not in mapping:
-            errors.append("Mapping sem topic_id.")
+
+        extra_keys = sorted(set(mapping.keys()) - expected_keys)
+        if extra_keys:
+            errors.append(
+                f"Campos extras no mapping de topic_id {mapping.get('topic_id')}: {extra_keys}"
+            )
+
+        missing_keys = sorted(expected_keys - set(mapping.keys()))
+        if missing_keys:
+            errors.append(
+                f"Campos obrigatorios ausentes no mapping de topic_id {mapping.get('topic_id')}: {missing_keys}"
+            )
+            continue
+
+        topic_id, topic_error = _as_int_topic_id(mapping.get("topic_id"))
+        if topic_error:
+            errors.append(topic_error)
         else:
-            mapping_ids.append(int(mapping["topic_id"]))
+            mapping_ids.append(topic_id)
 
-    missing_ids = sorted(set(topic_ids) - set(mapping_ids))
+        macro_theme = mapping.get("macro_theme")
+        if not isinstance(macro_theme, str) or not macro_theme.strip():
+            errors.append(f"macro_theme invalido para topic_id {mapping.get('topic_id')}.")
+        elif forbid_new_macrothemes and macro_theme not in allowed_macrothemes:
+            errors.append(
+                f"Macrotema invalido para topic_id {mapping.get('topic_id')}: '{macro_theme}'."
+            )
+
+        if mapping.get("confidence") not in VALID_CONFIDENCE:
+            errors.append(f"Confianca invalida para topic_id {mapping.get('topic_id')}.")
+
+        if mapping.get("status") not in VALID_STATUS:
+            errors.append(f"Status invalido para topic_id {mapping.get('topic_id')}.")
+        elif mapping.get("status") == "EMERGENTE" and mapping.get(
+            "confidence"
+        ) != confidence_low_threshold:
+            errors.append(
+                f"topic_id {mapping.get('topic_id')} marcado como EMERGENTE sem confidence {confidence_low_threshold}."
+            )
+
+    duplicate_ids = sorted(
+        topic_id for topic_id in set(mapping_ids) if mapping_ids.count(topic_id) > 1
+    )
+    if duplicate_ids:
+        errors.append(f"topic_ids duplicados no mapeamento: {duplicate_ids}")
+
+    topic_ids_set = set(topic_ids)
+    missing_ids = sorted(topic_ids_set - set(mapping_ids))
     if missing_ids:
-        errors.append(f"Tópicos sem mapeamento: {missing_ids}")
+        errors.append(f"Topicos sem mapeamento: {missing_ids}")
 
-    extra_ids = sorted(set(mapping_ids) - set(topic_ids))
+    extra_ids = sorted(set(mapping_ids) - topic_ids_set)
     if extra_ids:
-        errors.append(f"Tópicos inesperados no mapeamento: {extra_ids}")
+        errors.append(f"Topicos inesperados no mapeamento: {extra_ids}")
 
-    emergent_names = _extract_emergent_names(payload)
-    for mapping in mappings:
-        if mapping.get("status") == "EMERGENTE":
-            theme_name = mapping.get("theme")
-            if theme_name not in emergent_names:
-                errors.append(
-                    f"Tema emergente '{theme_name}' não listado em emergent_themes."
-                )
     return errors
 
 
