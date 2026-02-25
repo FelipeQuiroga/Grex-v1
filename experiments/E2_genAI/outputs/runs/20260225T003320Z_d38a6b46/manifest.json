@@ -1,0 +1,45 @@
+{
+  "timestamp": "2026-02-25T00:37:26.970967+00:00",
+  "git_hash": "acf46cf3aafe48917338e68bd8f615ac2839c640",
+  "config": {
+    "source": {
+      "e1_csv_path": "../E1_cluster/output_bertopic_clusters.csv"
+    },
+    "aggregation": {
+      "drop_noise": true,
+      "min_relato_len": 8,
+      "examples_per_topic": 8,
+      "top_terms_k": 8,
+      "sample_method": "hash"
+    },
+    "llm": {
+      "provider": "ollama",
+      "model": "llama3.1:latest",
+      "timeout_sec": 120,
+      "retries": 1
+    },
+    "rules": {
+      "macro_taxonomy": [
+        "Pessoas e Capacidade",
+        "Processos e Governanca",
+        "Planejamento e Priorizacao",
+        "Sistemas e Dados",
+        "Infraestrutura e Equipamentos",
+        "Qualidade e Compliance",
+        "Seguranca e Riscos",
+        "Clientes e Atendimento"
+      ],
+      "thresholds": {
+        "confidence_low_threshold": "LOW",
+        "emergent_min_volume_abs": 5,
+        "emergent_min_volume_pct": 0.02
+      },
+      "forbid_new_macrothemes": true
+    },
+    "run": {
+      "outputs_base_dir": "./outputs/runs",
+      "prompt_version": "e2_v2_fixed_taxonomy"
+    }
+  },
+  "status": "FAILED"
+}
