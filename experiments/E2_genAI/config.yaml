@@ -12,9 +12,10 @@ aggregation:
 
 llm:
   provider: "ollama"
-  model: "llama3.1:latest" 
+  model: "llama3:latest" 
   timeout_sec: 120
   retries: 1
+  batch_size: 20
 
 rules:
   macro_taxonomy:

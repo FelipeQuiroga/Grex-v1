@@ -31,7 +31,8 @@ Regras obrigatorias:
 Taxonomia macro fixa (use apenas itens desta lista):
 {macro_taxonomy_json}
 
-Formato de saida (JSON estrito):
+Formato de saida (JSON estrito **SEM NENHUM TEXTO ADICIONAL**):
+```json
 {{
   "mappings": [
     {{
@@ -42,6 +43,7 @@ Formato de saida (JSON estrito):
     }}
   ]
 }}
+```
 
 Aqui esta o payload agregado de topicos:
 {json.dumps(payload, ensure_ascii=False, indent=2)}

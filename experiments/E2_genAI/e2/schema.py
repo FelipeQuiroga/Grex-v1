@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import Iterable
 
 
@@ -9,27 +10,24 @@ VALID_STATUS = {"OK", "REVISAR", "EMERGENTE"}
 
 
 def parse_json(raw: str) -> tuple[dict | None, list[str]]:
-    # 1. Limpa espaços no começo e no fim
     cleaned_text = raw.strip()
-    
-    # 2. Se a IA usou blocos de markdown (```json ... ```), extrai só o miolo
+
+    # strip markdown code fences if present
     if "```" in cleaned_text:
         match = re.search(r'```(?:json)?(.*?)```', cleaned_text, re.DOTALL | re.IGNORECASE)
         if match:
             cleaned_text = match.group(1).strip()
     else:
-        # 3. Se ela não usou markdown, mas mandou texto antes/depois, 
-        # procura a primeira '{' e a última '}'
         match = re.search(r'(\{.*\})', cleaned_text, re.DOTALL)
         if match:
             cleaned_text = match.group(1).strip()
 
-    # Agora sim, tentamos converter o texto limpo em JSON
     try:
         payload = json.loads(cleaned_text)
         return payload, []
     except json.JSONDecodeError as exc:
-        return None, [f"JSON inválido: {exc}"]
+        # keep original raw for debugging
+        return None, [f"JSON inválido: {exc}", f"raw text: {cleaned_text!r}"]
 
 
 def _as_int_topic_id(value: object) -> tuple[int | None, str | None]:

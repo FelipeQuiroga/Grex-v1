@@ -48,9 +48,7 @@ def run_pipeline(config_path: str | Path) -> int:
     )
     write_json(run_dir / "input_topics.json", topics_payload)
 
-    prompt = build_prompt(topics_payload, config["rules"])
-    write_text(run_dir / "prompt.txt", prompt)
-
+    # --- INÍCIO DA REFATORAÇÃO DE BATCHING ---
     llm_config = LLMConfig(
         provider=config["llm"]["provider"],
         model=config["llm"]["model"],
@@ -58,38 +56,66 @@ def run_pipeline(config_path: str | Path) -> int:
         retries=config["llm"]["retries"],
     )
     client = LLMClient(llm_config)
-    raw_response = ""
-    validated = None
-    errors: list[str] = []
-    topic_ids = [topic["topic_id"] for topic in topics_payload["topics"]]
-    try:
-        raw_response, _ = generate_with_retry(client, prompt, llm_config.retries)
-        write_text(run_dir / "llm_raw.txt", raw_response)
-        validated, errors = parse_and_validate(
-            raw_response, topic_ids=topic_ids, rules=config["rules"]
-        )
-    except Exception as exc:
-        errors = [f"Falha na chamada LLM: {exc}"]
+    
+    all_topics = topics_payload["topics"]
+    batch_size = config["llm"].get("batch_size", 20) # Recomendado entre 10 e 20
+    
+    final_mappings = []
+    global_errors = []
+    
+    # Fatiando a lista de tópicos em lotes
+    for i in range(0, len(all_topics), batch_size):
+        batch_topics = all_topics[i : i + batch_size]
+        batch_payload = {"topics": batch_topics}
+        batch_topic_ids = [t["topic_id"] for t in batch_topics]
+        
+        prompt = build_prompt(batch_payload, config["rules"])
+        
+        # Salva prompts por batch para debug (opcional)
+        write_text(run_dir / f"prompt_batch_{i}.txt", prompt)
 
-    if errors and raw_response:
-        repair_prompt = build_repair_prompt(raw_response, errors)
-        write_text(run_dir / "prompt_repair.txt", repair_prompt)
+        batch_validated = None
+        batch_errors = []
+        
         try:
-            repair_response, _ = generate_with_retry(client, repair_prompt, 0)
-            write_text(run_dir / "llm_raw_retry.txt", repair_response)
-            validated, errors = parse_and_validate(
-                repair_response, topic_ids=topic_ids, rules=config["rules"]
+            raw_response, _ = generate_with_retry(client, prompt, llm_config.retries)
+            batch_validated, batch_errors = parse_and_validate(
+                raw_response, topic_ids=batch_topic_ids, rules=config["rules"]
             )
         except Exception as exc:
-            errors = errors + [f"Falha no repair prompt: {exc}"]
+            batch_errors = [f"Falha na chamada LLM (Batch {i}): {exc}"]
 
-    status = "SUCCESS" if not errors else "FAILED"
-    if validated:
-        write_json(run_dir / "result.json", validated)
-        metrics = compute_metrics(validated, topics_payload, config["rules"])
+        # Lógica de Repair para o Batch atual
+        if batch_errors and raw_response:
+            repair_prompt = build_repair_prompt(raw_response, batch_errors)
+            try:
+                repair_response, _ = generate_with_retry(client, repair_prompt, 0)
+                batch_validated, batch_errors = parse_and_validate(
+                    repair_response, topic_ids=batch_topic_ids, rules=config["rules"]
+                )
+            except Exception as exc:
+                batch_errors = batch_errors + [f"Falha no repair prompt (Batch {i}): {exc}"]
+
+        # Consolidando resultados ou erros
+        if batch_validated and not batch_errors:
+            final_mappings.extend(batch_validated["mappings"])
+        else:
+            global_errors.extend(batch_errors)
+
+    # --- FIM DA REFATORAÇÃO DE BATCHING ---
+
+    status = "SUCCESS" if not global_errors else "FAILED"
+    
+    if final_mappings:
+        # Remonta o payload validado completo no formato esperado
+        consolidated_result = {"mappings": final_mappings}
+        write_json(run_dir / "result.json", consolidated_result)
+        
+        metrics = compute_metrics(consolidated_result, topics_payload, config["rules"])
         write_json(run_dir / "metrics.json", metrics)
-    if errors:
-        write_text(run_dir / "validation_errors.txt", json.dumps(errors, indent=2))
+        
+    if global_errors:
+        write_text(run_dir / "validation_errors.txt", json.dumps(global_errors, indent=2))
 
     write_manifest(run_dir, config, status)
     return 0 if status == "SUCCESS" else 1
