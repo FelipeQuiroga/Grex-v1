@@ -1,0 +1,160 @@
+Voce e um classificador de topicos para macrotemas pre-definidos.
+Sua tarefa e classificar cada topic_id em exatamente um macrotema desta taxonomia fixa.
+
+Regras obrigatorias:
+- Classifique apenas dentro desses macrotemas.
+- Nao crie novos macrotemas.
+- Cada topic_id deve mapear para exatamente 1 macro_theme.
+- confidence deve ser: HIGH | MEDIUM | LOW.
+- status deve ser: OK | REVISAR | EMERGENTE.
+- Regra objetiva para EMERGENTE:
+  * confidence == LOW
+  * volume_relatos >= 5
+  * share_pct >= 0.02
+- Se qualquer condicao acima falhar, nao use EMERGENTE.
+- Retorne apenas JSON valido. Nenhum texto fora do JSON.
+
+Taxonomia macro fixa (use apenas itens desta lista):
+[
+  "Pessoas e Capacidade",
+  "Processos e Governanca",
+  "Planejamento e Priorizacao",
+  "Sistemas e Dados",
+  "Infraestrutura e Equipamentos",
+  "Qualidade e Compliance",
+  "Seguranca e Riscos",
+  "Clientes e Atendimento"
+]
+
+Formato de saida (JSON estrito **SEM NENHUM TEXTO ADICIONAL**):
+```json
+{
+  "mappings": [
+    {
+      "topic_id": 0,
+      "macro_theme": "string",
+      "confidence": "HIGH|MEDIUM|LOW",
+      "status": "OK|REVISAR|EMERGENTE"
+    }
+  ]
+}
+```
+
+Aqui esta o payload agregado de topicos:
+{
+  "topics": [
+    {
+      "topic_id": 80,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "inventario",
+        "errado",
+        "carregado",
+        "por",
+        "estoque",
+        "erro"
+      ],
+      "setor": "cd",
+      "examples": [
+        "inventario errado carregado",
+        "inventario errado",
+        "inventario errado por estoque",
+        "inventario errado por erro"
+      ]
+    },
+    {
+      "topic_id": 81,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "vibrando",
+        "maq",
+        "tarde",
+        "mas",
+        "ajuda",
+        "aviso"
+      ],
+      "setor": "industria",
+      "examples": [
+        "maq vibrando mas n ajuda",
+        "maq vibrando sem aviso",
+        "maq vibrando a tarde",
+        "maq vibrando na linha 3",
+        "maq vibrando demais"
+      ]
+    },
+    {
+      "topic_id": 82,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "congestionada",
+        "doca",
+        "dnv",
+        "estoque"
+      ],
+      "setor": "cd",
+      "examples": [
+        "doca congestionada dnv",
+        "doca congestionada estoque",
+        "doca congestionada"
+      ]
+    },
+    {
+      "topic_id": 83,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "caixa",
+        "falta",
+        "pra",
+        "pela",
+        "manha",
+        "frequente"
+      ],
+      "setor": "cd",
+      "examples": [
+        "falta caixa",
+        "falta caixa frequente",
+        "falta caixa pela manha",
+        "falta caixa pra picking"
+      ]
+    },
+    {
+      "topic_id": 84,
+      "volume_relatos": 4,
+      "share_pct": 0.004,
+      "top_terms": [
+        "lento",
+        "manual",
+        "picking",
+        "desnecessario"
+      ],
+      "setor": "cd",
+      "examples": [
+        "picking manual lento desnecessario",
+        "picking manual lento"
+      ]
+    },
+    {
+      "topic_id": 85,
+      "volume_relatos": 3,
+      "share_pct": 0.003,
+      "top_terms": [
+        "espaco",
+        "falta",
+        "resultado",
+        "enderecos",
+        "turno",
+        "no"
+      ],
+      "setor": "cd",
+      "examples": [
+        "falta espaco no turno",
+        "falta espaco resultado",
+        "falta espaco enderecos"
+      ]
+    }
+  ]
+}

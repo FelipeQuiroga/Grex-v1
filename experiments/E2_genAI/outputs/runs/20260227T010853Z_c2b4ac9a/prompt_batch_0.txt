@@ -1,0 +1,522 @@
+Voce e um classificador de topicos para macrotemas pre-definidos.
+Sua tarefa e classificar cada topic_id em exatamente um macrotema desta taxonomia fixa.
+
+Regras obrigatorias:
+- Classifique apenas dentro desses macrotemas.
+- Nao crie novos macrotemas.
+- Cada topic_id deve mapear para exatamente 1 macro_theme.
+- confidence deve ser: HIGH | MEDIUM | LOW.
+- status deve ser: OK | REVISAR | EMERGENTE.
+- Regra objetiva para EMERGENTE:
+  * confidence == LOW
+  * volume_relatos >= 5
+  * share_pct >= 0.02
+- Se qualquer condicao acima falhar, nao use EMERGENTE.
+- Retorne apenas JSON valido. Nenhum texto fora do JSON.
+
+Taxonomia macro fixa (use apenas itens desta lista):
+[
+  "Pessoas e Capacidade",
+  "Processos e Governanca",
+  "Planejamento e Priorizacao",
+  "Sistemas e Dados",
+  "Infraestrutura e Equipamentos",
+  "Qualidade e Compliance",
+  "Seguranca e Riscos",
+  "Clientes e Atendimento"
+]
+
+Formato de saida (JSON estrito **SEM NENHUM TEXTO ADICIONAL**):
+```json
+{
+  "mappings": [
+    {
+      "topic_id": 0,
+      "macro_theme": "string",
+      "confidence": "HIGH|MEDIUM|LOW",
+      "status": "OK|REVISAR|EMERGENTE"
+    }
+  ]
+}
+```
+
+Aqui esta o payload agregado de topicos:
+{
+  "topics": [
+    {
+      "topic_id": 0,
+      "volume_relatos": 44,
+      "share_pct": 0.044,
+      "top_terms": [
+        "maq",
+        "parando",
+        "velha",
+        "parou",
+        "ponto",
+        "msm"
+      ],
+      "setor": "industria",
+      "examples": [
+        "maq vibrando ngm",
+        "maq parando falhou",
+        "maq velha depois do turno",
+        "maq parando mal ajustado",
+        "maq superaquecendo",
+        "maq velha demais",
+        "maq parou de setup",
+        "maq parando no setor b"
+      ]
+    },
+    {
+      "topic_id": 1,
+      "volume_relatos": 41,
+      "share_pct": 0.041,
+      "top_terms": [
+        "linha",
+        "atrasou",
+        "parada",
+        "travou",
+        "na",
+        "sujo"
+      ],
+      "setor": "industria",
+      "examples": [
+        "linha parada sujo",
+        "linha atrasou do turno da noite",
+        "linha travou dnv",
+        "linha travou sujo",
+        "linha 2 atrasou por manutencao",
+        "linha parada temp bugado",
+        "linha atrasou sobrecarregado",
+        "refeitorio sujo na linha 2"
+      ]
+    },
+    {
+      "topic_id": 2,
+      "volume_relatos": 35,
+      "share_pct": 0.035,
+      "top_terms": [
+        "escuta",
+        "lider",
+        "ausente",
+        "cobra",
+        "so",
+        "2x"
+      ],
+      "setor": "industria",
+      "examples": [
+        "lider ausente",
+        "lider n escuta no refeitorio",
+        "doca sem organizacao estoque",
+        "lider n escuta falhou",
+        "lider ausente no turno",
+        "lider n escuta 2x hj",
+        "lider so cobra resultado",
+        "lider n escuta no inicio turno"
+      ]
+    },
+    {
+      "topic_id": 3,
+      "volume_relatos": 29,
+      "share_pct": 0.029,
+      "top_terms": [
+        "sensor",
+        "desalinhado",
+        "bugado",
+        "enorme",
+        "almoco",
+        "demais"
+      ],
+      "setor": "industria",
+      "examples": [
+        "sensor bugado no setor b",
+        "sensor desalinhado confusa",
+        "sensor desalinhado puxado demais",
+        "sensor n le na prensa",
+        "sensor desalinhado depois do turno",
+        "sensor desalinhado mas n ajuda",
+        "sensor desalinhado no refeitorio",
+        "sensor bugado pelo supervisor"
+      ]
+    },
+    {
+      "topic_id": 4,
+      "volume_relatos": 26,
+      "share_pct": 0.026,
+      "top_terms": [
+        "ritmo",
+        "puxado",
+        "reclamacao",
+        "alta",
+        "geral",
+        "pressao"
+      ],
+      "setor": "industria",
+      "examples": [
+        "ritmo puxado mal ajustado",
+        "reclamacao geral na linha 3",
+        "ritmo puxado confusa",
+        "reclamacao geral pelo supervisor",
+        "ritmo puxado dnv",
+        "ritmo puxado sujo",
+        "ritmo puxado na area 1",
+        "reclamacao geral na troca de turno"
+      ]
+    },
+    {
+      "topic_id": 5,
+      "volume_relatos": 24,
+      "share_pct": 0.024,
+      "top_terms": [
+        "equipe",
+        "reduzida",
+        "almoco",
+        "enorme",
+        "doca",
+        "chegar"
+      ],
+      "setor": "industria",
+      "examples": [
+        "equipe reduzida p chegar",
+        "manutencao demorou enorme no almoco",
+        "equipe reduzida por falha eletrica",
+        "fila enorme no almoco",
+        "equipe reduzida sobrecarregado",
+        "fila no almoco p chegar",
+        "equipe reduzida a tarde",
+        "doca sem equipe no turno"
+      ]
+    },
+    {
+      "topic_id": 6,
+      "volume_relatos": 23,
+      "share_pct": 0.023,
+      "top_terms": [
+        "operador",
+        "cansado",
+        "sobrecarregado",
+        "apoio",
+        "novo",
+        "sem"
+      ],
+      "setor": "industria",
+      "examples": [
+        "separacao lenta novo operador",
+        "operador sobrecarregado sobrecarregado",
+        "operador sobrecarregado sujo",
+        "operador sobrecarregado na area 1",
+        "operador sobrecarregado",
+        "operador cansado",
+        "lider so cobra novo operador",
+        "operador sobrecarregado mal ajustado"
+      ]
+    },
+    {
+      "topic_id": 7,
+      "volume_relatos": 21,
+      "share_pct": 0.021,
+      "top_terms": [
+        "treinamento",
+        "insuficiente",
+        "falta",
+        "msm",
+        "sempre",
+        "ponto"
+      ],
+      "setor": "cd",
+      "examples": [
+        "treinamento insuficiente sempre no msm ponto",
+        "falta treinamento suficiente",
+        "falta treinamento novo operador",
+        "falta treinamento sem bateria",
+        "treinamento insuficiente na linha 2",
+        "treinamento insuficiente de setup",
+        "treinamento insuficiente falhou",
+        "falta treinamento dnv"
+      ]
+    },
+    {
+      "topic_id": 8,
+      "volume_relatos": 21,
+      "share_pct": 0.021,
+      "top_terms": [
+        "lento",
+        "lenta",
+        "setup",
+        "separacao",
+        "atraso",
+        "liberacao"
+      ],
+      "setor": "industria",
+      "examples": [
+        "separacao lenta frequente",
+        "sistema lento hj",
+        "setup lento na troca de turno",
+        "separacao lenta",
+        "setup lento na linha 2",
+        "separacao lenta hj",
+        "atraso na liberacao da qualidade",
+        "pressao alta de setup"
+      ]
+    },
+    {
+      "topic_id": 9,
+      "volume_relatos": 19,
+      "share_pct": 0.019,
+      "top_terms": [
+        "layout",
+        "confuso",
+        "ruim",
+        "demanda",
+        "feito",
+        "apoio"
+      ],
+      "setor": "cd",
+      "examples": [
+        "layout ruim hj",
+        "layout da linha ruim",
+        "layout ruim temp bugado",
+        "layout ruim da maq",
+        "layout confuso",
+        "layout confuso frequente",
+        "layout ruim feito errado",
+        "layout confuso direito"
+      ]
+    },
+    {
+      "topic_id": 10,
+      "volume_relatos": 18,
+      "share_pct": 0.018,
+      "top_terms": [
+        "refugos",
+        "excesso",
+        "de",
+        "alta",
+        "temp",
+        "pressao"
+      ],
+      "setor": "industria",
+      "examples": [
+        "excesso de refugos de refugos",
+        "excesso de refugos p chegar",
+        "excesso de refugos na linha 3",
+        "excesso de refugos extras",
+        "excesso de refugos no setor b",
+        "esteira parou de refugos",
+        "excesso de refugos feito errado",
+        "excesso de refugos demais"
+      ]
+    },
+    {
+      "topic_id": 11,
+      "volume_relatos": 18,
+      "share_pct": 0.018,
+      "top_terms": [
+        "posto",
+        "desconfortavel",
+        "ajustado",
+        "mal",
+        "demais",
+        "puxado"
+      ],
+      "setor": "industria",
+      "examples": [
+        "posto desconfortavel",
+        "posto desconfortavel demais",
+        "posto desconfortavel falhou",
+        "mt retrabalho desconfortavel",
+        "posto mal ajustado",
+        "posto desconfortavel sobrecarregado",
+        "posto mal ajustado toda hora",
+        "posto desconfortavel mas n ajuda"
+      ]
+    },
+    {
+      "topic_id": 12,
+      "volume_relatos": 17,
+      "share_pct": 0.017,
+      "top_terms": [
+        "planejada",
+        "curto",
+        "rota",
+        "mal",
+        "demanda",
+        "pra"
+      ],
+      "setor": "cd",
+      "examples": [
+        "rota mal planejada manual",
+        "rota mal planejada pra demanda",
+        "mt retrabalho feito errado",
+        "rota mal planejada",
+        "rota mal planejada hj",
+        "turno curto",
+        "rota mal planejada carregado",
+        "rota mal planejada estoque"
+      ]
+    },
+    {
+      "topic_id": 13,
+      "volume_relatos": 16,
+      "share_pct": 0.016,
+      "top_terms": [
+        "falhando",
+        "empilhadeira",
+        "armazem",
+        "manual",
+        "resolve",
+        "apoio"
+      ],
+      "setor": "cd",
+      "examples": [
+        "empilhadeira falhando",
+        "ngm resolve sem apoio",
+        "empilhadeira falhando no armazem 4",
+        "empilhadeira falhando pra picking",
+        "empilhadeira falhando pela manha",
+        "empilhadeira falhando por erro",
+        "empilhadeira falhando manual",
+        "mt retrabalho falhou"
+      ]
+    },
+    {
+      "topic_id": 14,
+      "volume_relatos": 15,
+      "share_pct": 0.015,
+      "top_terms": [
+        "grande",
+        "fila",
+        "carregamento",
+        "descarregar",
+        "no",
+        "dnv"
+      ],
+      "setor": "cd",
+      "examples": [
+        "fila grande p descarregar direito",
+        "fila grande p descarregar hj",
+        "fila grande p descarregar",
+        "retrabalho no carregamento dnv",
+        "fila grande no carregamento manual",
+        "fila grande no carregamento hj",
+        "fila grande no carregamento no turno",
+        "fila grande no carregamento pra picking"
+      ]
+    },
+    {
+      "topic_id": 15,
+      "volume_relatos": 15,
+      "share_pct": 0.015,
+      "top_terms": [
+        "recorrente",
+        "picking",
+        "erro",
+        "no",
+        "aviso",
+        "carregado"
+      ],
+      "setor": "cd",
+      "examples": [
+        "erro recorrente no picking no armazem 4",
+        "erro recorrente no picking carregado",
+        "erro recorrente no picking",
+        "erro recorrente no picking sem aviso",
+        "erro recorrente no picking pra picking",
+        "erro recorrente no picking novo operador"
+      ]
+    },
+    {
+      "topic_id": 16,
+      "volume_relatos": 15,
+      "share_pct": 0.015,
+      "top_terms": [
+        "esteira",
+        "parou",
+        "parada",
+        "hoje",
+        "empilhadeira",
+        "noite"
+      ],
+      "setor": "industria",
+      "examples": [
+        "esteira parou hj",
+        "esteira parou por manutencao",
+        "esteira parou depois do turno",
+        "esteira parou da linha",
+        "empilhadeira parada",
+        "empilhadeira parada hj",
+        "esteira parou sem apoio",
+        "esteira parou do turno da noite"
+      ]
+    },
+    {
+      "topic_id": 17,
+      "volume_relatos": 15,
+      "share_pct": 0.015,
+      "top_terms": [
+        "iluminação",
+        "ruim",
+        "noite",
+        "reclamação",
+        "da",
+        "do"
+      ],
+      "setor": "industria",
+      "examples": [
+        "barulho excessivo do turno da noite",
+        "iluminação ruim dnv",
+        "iluminação ruim demais",
+        "iluminação ruim enorme no almoco",
+        "iluminação ruim do turno da noite",
+        "iluminação ruim 2x hj",
+        "reclamação geral do turno da noite",
+        "iluminação ruim falhou"
+      ]
+    },
+    {
+      "topic_id": 18,
+      "volume_relatos": 14,
+      "share_pct": 0.014,
+      "top_terms": [
+        "bateria",
+        "scanner",
+        "sem",
+        "entrega",
+        "funciona",
+        "resultado"
+      ],
+      "setor": "cd",
+      "examples": [
+        "scanner n funciona sem bateria",
+        "scanner sem bateria",
+        "scanner sem bateria sem bateria",
+        "scanner sem bateria manual",
+        "scanner sem bateria no armazem 4",
+        "scanner sem bateria entrega",
+        "scanner sem bateria resultado"
+      ]
+    },
+    {
+      "topic_id": 19,
+      "volume_relatos": 14,
+      "share_pct": 0.014,
+      "top_terms": [
+        "confunde",
+        "picking",
+        "enderecos",
+        "aviso",
+        "dnv",
+        "por"
+      ],
+      "setor": "cd",
+      "examples": [
+        "picking confunde no turno",
+        "picking confunde sem aviso",
+        "picking confunde enderecos",
+        "picking confunde dnv",
+        "picking confunde",
+        "picking confunde por erro"
+      ]
+    }
+  ]
+}

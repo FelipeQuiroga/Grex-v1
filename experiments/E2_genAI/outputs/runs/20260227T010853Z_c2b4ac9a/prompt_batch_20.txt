@@ -1,0 +1,496 @@
+Voce e um classificador de topicos para macrotemas pre-definidos.
+Sua tarefa e classificar cada topic_id em exatamente um macrotema desta taxonomia fixa.
+
+Regras obrigatorias:
+- Classifique apenas dentro desses macrotemas.
+- Nao crie novos macrotemas.
+- Cada topic_id deve mapear para exatamente 1 macro_theme.
+- confidence deve ser: HIGH | MEDIUM | LOW.
+- status deve ser: OK | REVISAR | EMERGENTE.
+- Regra objetiva para EMERGENTE:
+  * confidence == LOW
+  * volume_relatos >= 5
+  * share_pct >= 0.02
+- Se qualquer condicao acima falhar, nao use EMERGENTE.
+- Retorne apenas JSON valido. Nenhum texto fora do JSON.
+
+Taxonomia macro fixa (use apenas itens desta lista):
+[
+  "Pessoas e Capacidade",
+  "Processos e Governanca",
+  "Planejamento e Priorizacao",
+  "Sistemas e Dados",
+  "Infraestrutura e Equipamentos",
+  "Qualidade e Compliance",
+  "Seguranca e Riscos",
+  "Clientes e Atendimento"
+]
+
+Formato de saida (JSON estrito **SEM NENHUM TEXTO ADICIONAL**):
+```json
+{
+  "mappings": [
+    {
+      "topic_id": 0,
+      "macro_theme": "string",
+      "confidence": "HIGH|MEDIUM|LOW",
+      "status": "OK|REVISAR|EMERGENTE"
+    }
+  ]
+}
+```
+
+Aqui esta o payload agregado de topicos:
+{
+  "topics": [
+    {
+      "topic_id": 20,
+      "volume_relatos": 14,
+      "share_pct": 0.014,
+      "top_terms": [
+        "sobrecarregada",
+        "rota",
+        "meio",
+        "endereco",
+        "entrega",
+        "do"
+      ],
+      "setor": "cd",
+      "examples": [
+        "rota sobrecarregada por endereco",
+        "ngm resolve sobrecarregado",
+        "rota sobrecarregada entrega",
+        "rota sobrecarregada no meio do turno",
+        "rota sobrecarregada hj",
+        "empilhadeira parada no meio do turno",
+        "rota sobrecarregada"
+      ]
+    },
+    {
+      "topic_id": 21,
+      "volume_relatos": 13,
+      "share_pct": 0.013,
+      "top_terms": [
+        "atrasada",
+        "separacao",
+        "enderecos",
+        "suficiente",
+        "entrega",
+        "demorou"
+      ],
+      "setor": "cd",
+      "examples": [
+        "separacao atrasada",
+        "separacao atrasada por estoque",
+        "separacao atrasada enderecos",
+        "separacao atrasada entrega",
+        "manutencao demorou p chegar",
+        "separacao refeita no turno",
+        "separacao atrasada suficiente"
+      ]
+    },
+    {
+      "topic_id": 22,
+      "volume_relatos": 13,
+      "share_pct": 0.013,
+      "top_terms": [
+        "falhando",
+        "sensor",
+        "manha",
+        "pela",
+        "nao",
+        "eletrica"
+      ],
+      "setor": "industria",
+      "examples": [
+        "sensor nao le direito",
+        "sensor falhando no meio do turno",
+        "sensor falhando toda hora",
+        "sensor falhando na troca de turno",
+        "sensor falhando na linha 3",
+        "sensor falhando pela manha",
+        "sensor falhando por falha eletrica",
+        "sensor falhando da linha"
+      ]
+    },
+    {
+      "topic_id": 23,
+      "volume_relatos": 13,
+      "share_pct": 0.013,
+      "top_terms": [
+        "check",
+        "seguranca",
+        "falhou",
+        "de",
+        "mas",
+        "ajuda"
+      ],
+      "setor": "industria",
+      "examples": [
+        "check de seguranca falhou pela manha",
+        "check de seguranca falhou mal ajustado",
+        "check de seguranca falhou temp bugado",
+        "check de seguranca falhou da maq",
+        "check de seguranca falhou mas n ajuda",
+        "check de seguranca falhou falhou",
+        "check de seguranca falhou p chegar",
+        "check de seguranca falhou"
+      ]
+    },
+    {
+      "topic_id": 24,
+      "volume_relatos": 13,
+      "share_pct": 0.013,
+      "top_terms": [
+        "divergente",
+        "estoque",
+        "endereco",
+        "carregado",
+        "direito",
+        "meio"
+      ],
+      "setor": "cd",
+      "examples": [
+        "estoque divergente",
+        "estoque divergente direito",
+        "estoque divergente no meio do turno",
+        "estoque divergente frequente",
+        "estoque divergente por endereco",
+        "estoque divergente carregado"
+      ]
+    },
+    {
+      "topic_id": 25,
+      "volume_relatos": 12,
+      "share_pct": 0.012,
+      "top_terms": [
+        "padrao",
+        "fora",
+        "palete",
+        "do",
+        "suficiente",
+        "desnecessario"
+      ],
+      "setor": "cd",
+      "examples": [
+        "palete fora do padrao",
+        "palete fora do padrao suficiente",
+        "palete fora do padrao desnecessario",
+        "palete fora do padrao no meio do turno"
+      ]
+    },
+    {
+      "topic_id": 26,
+      "volume_relatos": 12,
+      "share_pct": 0.012,
+      "top_terms": [
+        "pesada",
+        "carga",
+        "manual",
+        "dnv",
+        "por",
+        "hj"
+      ],
+      "setor": "cd",
+      "examples": [
+        "carga pesada",
+        "carga pesada dnv",
+        "carga pesada no turno",
+        "carga pesada manual",
+        "carga pesada por erro",
+        "carga pesada hj"
+      ]
+    },
+    {
+      "topic_id": 27,
+      "volume_relatos": 12,
+      "share_pct": 0.012,
+      "top_terms": [
+        "excessivo",
+        "barulho",
+        "horrivel",
+        "refeitorio",
+        "demais",
+        "mas"
+      ],
+      "setor": "industria",
+      "examples": [
+        "barulho excessivo sobrecarregado",
+        "barulho excessivo confusa",
+        "barulho excessivo demais",
+        "linha parada e barulho",
+        "refeitorio horrivel e barulho",
+        "barulho excessivo mas n ajuda",
+        "barulho excessivo sem aviso",
+        "barulho excessivo na troca de turno"
+      ]
+    },
+    {
+      "topic_id": 28,
+      "volume_relatos": 12,
+      "share_pct": 0.012,
+      "top_terms": [
+        "retrabalho",
+        "mt",
+        "setor",
+        "rota",
+        "temp",
+        "demorou"
+      ],
+      "setor": "industria",
+      "examples": [
+        "retrabalho na rota",
+        "mt retrabalho no setor b",
+        "manutencao demorou no setor b",
+        "mt retrabalho no refeitorio",
+        "mt retrabalho temp bugado",
+        "mt retrabalho dnv",
+        "mt retrabalho confusa",
+        "mt retrabalho pela manha"
+      ]
+    },
+    {
+      "topic_id": 29,
+      "volume_relatos": 12,
+      "share_pct": 0.012,
+      "top_terms": [
+        "perdido",
+        "novo",
+        "operador",
+        "demanda",
+        "pra",
+        "aviso"
+      ],
+      "setor": "cd",
+      "examples": [
+        "operador novo perdido novo operador",
+        "operador novo perdido pra demanda",
+        "operador novo perdido sem aviso",
+        "operador novo perdido"
+      ]
+    },
+    {
+      "topic_id": 30,
+      "volume_relatos": 12,
+      "share_pct": 0.012,
+      "top_terms": [
+        "horrivel",
+        "refeitorio",
+        "sujo",
+        "eletrica",
+        "area",
+        "feito"
+      ],
+      "setor": "industria",
+      "examples": [
+        "refeitorio horrivel na area 1",
+        "refeitorio horrivel hj",
+        "refeitorio sujo",
+        "refeitorio sujo sem aviso",
+        "refeitorio horrivel pela manha",
+        "refeitorio horrivel no meio do turno",
+        "refeitorio horrivel sujo",
+        "refeitorio horrivel na troca de turno"
+      ]
+    },
+    {
+      "topic_id": 31,
+      "volume_relatos": 12,
+      "share_pct": 0.012,
+      "top_terms": [
+        "refeita",
+        "lotado",
+        "rota",
+        "estoque",
+        "resultado",
+        "enderecos"
+      ],
+      "setor": "cd",
+      "examples": [
+        "estoque lotado",
+        "estoque lotado resultado",
+        "rota refeita",
+        "rota refeita enderecos"
+      ]
+    },
+    {
+      "topic_id": 32,
+      "volume_relatos": 12,
+      "share_pct": 0.012,
+      "top_terms": [
+        "prensa",
+        "travou",
+        "troca",
+        "na",
+        "enorme",
+        "le"
+      ],
+      "setor": "industria",
+      "examples": [
+        "prensa travou desalinhado",
+        "prensa travou por manutencao",
+        "prensa travou na troca de turno",
+        "pressao alta na prensa",
+        "barulho excessivo na prensa",
+        "troca de turno confusa na prensa",
+        "prensa travou desconfortavel",
+        "prensa travou sobrecarregado"
+      ]
+    },
+    {
+      "topic_id": 33,
+      "volume_relatos": 12,
+      "share_pct": 0.012,
+      "top_terms": [
+        "troca",
+        "confusa",
+        "demorou",
+        "turno",
+        "de",
+        "manutencao"
+      ],
+      "setor": "industria",
+      "examples": [
+        "troca de turno confusa depois do turno",
+        "troca de turno confusa desalinhado",
+        "troca de turno confusa na linha 3",
+        "manutencao demorou extras",
+        "posto mal ajustado na troca de turno",
+        "manutencao demorou no refeitorio",
+        "troca de turno confusa",
+        "manutencao demorou na troca de turno"
+      ]
+    },
+    {
+      "topic_id": 34,
+      "volume_relatos": 11,
+      "share_pct": 0.011,
+      "top_terms": [
+        "expedicao",
+        "frequente",
+        "erro",
+        "na",
+        "por",
+        "estoque"
+      ],
+      "setor": "cd",
+      "examples": [
+        "erro frequente na expedicao",
+        "erro frequente na expedicao por estoque",
+        "erro frequente na expedicao no meio do turno",
+        "erro frequente na expedicao hj"
+      ]
+    },
+    {
+      "topic_id": 35,
+      "volume_relatos": 11,
+      "share_pct": 0.011,
+      "top_terms": [
+        "irreal",
+        "meta",
+        "toda",
+        "hora",
+        "temp",
+        "tarde"
+      ],
+      "setor": "industria",
+      "examples": [
+        "meta irreal pela manha",
+        "meta irreal desalinhado",
+        "meta irreal toda hora",
+        "meta irreal hj",
+        "meta irreal temp bugado",
+        "meta irreal dnv",
+        "meta irreal mal ajustado",
+        "meta irreal mas n ajuda"
+      ]
+    },
+    {
+      "topic_id": 36,
+      "volume_relatos": 11,
+      "share_pct": 0.011,
+      "top_terms": [
+        "setup",
+        "errado",
+        "dnv",
+        "reclamacao",
+        "inicio",
+        "feito"
+      ],
+      "setor": "industria",
+      "examples": [
+        "setup errado na prensa",
+        "reclamacao geral de setup",
+        "setup errado mas n ajuda",
+        "setup feito errado",
+        "setup errado no setor b",
+        "setup errado de setup",
+        "setup errado no inicio turno",
+        "setup errado 2x hj"
+      ]
+    },
+    {
+      "topic_id": 37,
+      "volume_relatos": 10,
+      "share_pct": 0.01,
+      "top_terms": [
+        "sistema",
+        "bugado",
+        "urgencia",
+        "com",
+        "enderecos",
+        "aviso"
+      ],
+      "setor": "cd",
+      "examples": [
+        "sistema bugado enderecos",
+        "sistema bugado",
+        "sistema bugado dnv",
+        "sistema bugado com urgencia",
+        "sistema bugado direito",
+        "sistema bugado sem aviso"
+      ]
+    },
+    {
+      "topic_id": 38,
+      "volume_relatos": 10,
+      "share_pct": 0.01,
+      "top_terms": [
+        "sinalizada",
+        "doca",
+        "mal",
+        "feito",
+        "resolve",
+        "por"
+      ],
+      "setor": "cd",
+      "examples": [
+        "doca mal sinalizada enderecos",
+        "doca mal sinalizada",
+        "doca mal sinalizada no turno",
+        "ngm resolve feito errado",
+        "doca mal sinalizada por erro"
+      ]
+    },
+    {
+      "topic_id": 39,
+      "volume_relatos": 10,
+      "share_pct": 0.01,
+      "top_terms": [
+        "enderecado",
+        "mal",
+        "estoque",
+        "desnecessario",
+        "direito",
+        "frequente"
+      ],
+      "setor": "cd",
+      "examples": [
+        "estoque mal enderecado desnecessario",
+        "estoque mal enderecado direito",
+        "estoque mal enderecado",
+        "estoque mal enderecado frequente"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,469 @@
+Voce e um classificador de topicos para macrotemas pre-definidos.
+Sua tarefa e classificar cada topic_id em exatamente um macrotema desta taxonomia fixa.
+
+Regras obrigatorias:
+- Classifique apenas dentro desses macrotemas.
+- Nao crie novos macrotemas.
+- Cada topic_id deve mapear para exatamente 1 macro_theme.
+- confidence deve ser: HIGH | MEDIUM | LOW.
+- status deve ser: OK | REVISAR | EMERGENTE.
+- Regra objetiva para EMERGENTE:
+  * confidence == LOW
+  * volume_relatos >= 5
+  * share_pct >= 0.02
+- Se qualquer condicao acima falhar, nao use EMERGENTE.
+- Retorne apenas JSON valido. Nenhum texto fora do JSON.
+
+Taxonomia macro fixa (use apenas itens desta lista):
+[
+  "Pessoas e Capacidade",
+  "Processos e Governanca",
+  "Planejamento e Priorizacao",
+  "Sistemas e Dados",
+  "Infraestrutura e Equipamentos",
+  "Qualidade e Compliance",
+  "Seguranca e Riscos",
+  "Clientes e Atendimento"
+]
+
+Formato de saida (JSON estrito **SEM NENHUM TEXTO ADICIONAL**):
+```json
+{
+  "mappings": [
+    {
+      "topic_id": 0,
+      "macro_theme": "string",
+      "confidence": "HIGH|MEDIUM|LOW",
+      "status": "OK|REVISAR|EMERGENTE"
+    }
+  ]
+}
+```
+
+Aqui esta o payload agregado de topicos:
+{
+  "topics": [
+    {
+      "topic_id": 40,
+      "volume_relatos": 10,
+      "share_pct": 0.01,
+      "top_terms": [
+        "cobra",
+        "lider",
+        "so",
+        "inicio",
+        "refeitorio",
+        "dnv"
+      ],
+      "setor": "industria",
+      "examples": [
+        "lider cobra dnv",
+        "lider cobra hj",
+        "lider so cobra",
+        "lider cobra no refeitorio",
+        "lider cobra no inicio turno"
+      ]
+    },
+    {
+      "topic_id": 41,
+      "volume_relatos": 10,
+      "share_pct": 0.01,
+      "top_terms": [
+        "quebrada",
+        "ferramenta",
+        "depois",
+        "feito",
+        "tarde",
+        "le"
+      ],
+      "setor": "industria",
+      "examples": [
+        "ferramenta quebrada hj",
+        "ferramenta quebrada sem aviso",
+        "ferramenta quebrada n le direito",
+        "ferramenta quebrada depois do turno",
+        "ferramenta quebrada a tarde",
+        "ferramenta quebrada na linha 2",
+        "ferramenta quebrada demais",
+        "ferramenta quebrada temp bugado"
+      ]
+    },
+    {
+      "topic_id": 42,
+      "volume_relatos": 10,
+      "share_pct": 0.01,
+      "top_terms": [
+        "checklist",
+        "incompleto",
+        "barulho",
+        "le",
+        "prensa",
+        "direito"
+      ],
+      "setor": "industria",
+      "examples": [
+        "checklist incompleto no meio do turno",
+        "checklist incompleto na prensa",
+        "checklist incompleto e barulho",
+        "checklist incompleto da maq",
+        "checklist incompleto temp bugado",
+        "checklist incompleto n le direito",
+        "checklist incompleto hj",
+        "checklist de setup incompleto"
+      ]
+    },
+    {
+      "topic_id": 43,
+      "volume_relatos": 10,
+      "share_pct": 0.01,
+      "top_terms": [
+        "muita",
+        "pressao",
+        "meta",
+        "por",
+        "entrega",
+        "resultado"
+      ],
+      "setor": "cd",
+      "examples": [
+        "muita pressao por meta direito",
+        "muita pressao por meta",
+        "muita pressao por meta por estoque",
+        "mt pressao por meta",
+        "muita pressao por meta no meio do turno",
+        "muita pressao por meta entrega",
+        "muita pressao por meta manual",
+        "muita pressao por meta resultado"
+      ]
+    },
+    {
+      "topic_id": 44,
+      "volume_relatos": 10,
+      "share_pct": 0.01,
+      "top_terms": [
+        "conferencia",
+        "mt",
+        "erro",
+        "na",
+        "urgencia",
+        "com"
+      ],
+      "setor": "cd",
+      "examples": [
+        "mt erro na conferencia por erro",
+        "mt erro na conferencia",
+        "mt erro na conferencia com urgencia",
+        "mt erro na conferencia no turno"
+      ]
+    },
+    {
+      "topic_id": 45,
+      "volume_relatos": 9,
+      "share_pct": 0.009,
+      "top_terms": [
+        "reentrega",
+        "frequente",
+        "armazem",
+        "enderecos",
+        "no",
+        "meio"
+      ],
+      "setor": "cd",
+      "examples": [
+        "reentrega frequente",
+        "reentrega frequente no turno",
+        "reentrega frequente enderecos",
+        "reentrega frequente no meio do turno",
+        "reentrega frequente no armazem 4"
+      ]
+    },
+    {
+      "topic_id": 46,
+      "volume_relatos": 9,
+      "share_pct": 0.009,
+      "top_terms": [
+        "carregamento",
+        "retrabalho",
+        "no",
+        "suficiente",
+        "carregado",
+        "direito"
+      ],
+      "setor": "cd",
+      "examples": [
+        "retrabalho no carregamento carregado",
+        "retrabalho no carregamento direito",
+        "retrabalho no carregamento",
+        "retrabalho no carregamento suficiente"
+      ]
+    },
+    {
+      "topic_id": 47,
+      "volume_relatos": 9,
+      "share_pct": 0.009,
+      "top_terms": [
+        "disputada",
+        "empilhadeira",
+        "entrega"
+      ],
+      "setor": "cd",
+      "examples": [
+        "empilhadeira disputada entrega",
+        "empilhadeira disputada"
+      ]
+    },
+    {
+      "topic_id": 48,
+      "volume_relatos": 9,
+      "share_pct": 0.009,
+      "top_terms": [
+        "retorno",
+        "da",
+        "lider",
+        "resultado",
+        "pra",
+        "enderecos"
+      ],
+      "setor": "cd",
+      "examples": [
+        "lider n da retorno pra picking",
+        "lider n da retorno resultado",
+        "lider n da retorno pela manha",
+        "lider n da retorno enderecos",
+        "lider n da retorno"
+      ]
+    },
+    {
+      "topic_id": 49,
+      "volume_relatos": 9,
+      "share_pct": 0.009,
+      "top_terms": [
+        "lenta",
+        "conferencia",
+        "manual",
+        "pra",
+        "pela",
+        "manha"
+      ],
+      "setor": "cd",
+      "examples": [
+        "conferencia manual lenta pra picking",
+        "conferencia manual lenta",
+        "conferencia manual lenta pela manha"
+      ]
+    },
+    {
+      "topic_id": 50,
+      "volume_relatos": 9,
+      "share_pct": 0.009,
+      "top_terms": [
+        "atrasou",
+        "rota",
+        "enderecos",
+        "entrega",
+        "resultado",
+        "manual"
+      ],
+      "setor": "cd",
+      "examples": [
+        "rota atrasou entrega",
+        "rota atrasou resultado",
+        "rota atrasou",
+        "rota atrasou manual",
+        "rota atrasou enderecos",
+        "rota atrasou frequente"
+      ]
+    },
+    {
+      "topic_id": 51,
+      "volume_relatos": 9,
+      "share_pct": 0.009,
+      "top_terms": [
+        "trocado",
+        "pedido",
+        "manual",
+        "frequente",
+        "por",
+        "estoque"
+      ],
+      "setor": "cd",
+      "examples": [
+        "pedido trocado manual",
+        "pedido trocado",
+        "pedido trocado frequente",
+        "pedido trocado por estoque"
+      ]
+    },
+    {
+      "topic_id": 52,
+      "volume_relatos": 8,
+      "share_pct": 0.008,
+      "top_terms": [
+        "material",
+        "faltando",
+        "supervisor",
+        "pelo",
+        "da",
+        "linha"
+      ],
+      "setor": "industria",
+      "examples": [
+        "material faltando da linha",
+        "material faltando sujo",
+        "material faltando pelo supervisor",
+        "material faltando puxado demais",
+        "material faltando hj",
+        "material faltando no meio do turno",
+        "linha parou por falta material"
+      ]
+    },
+    {
+      "topic_id": 53,
+      "volume_relatos": 8,
+      "share_pct": 0.008,
+      "top_terms": [
+        "calor",
+        "mt",
+        "sempre",
+        "ponto",
+        "msm",
+        "linha"
+      ],
+      "setor": "industria",
+      "examples": [
+        "mt calor e barulho",
+        "mt calor no refeitorio",
+        "mt calor puxado demais",
+        "mt calor da linha",
+        "mt calor na linha 2",
+        "mt calor sempre no msm ponto",
+        "mt calor temp bugado",
+        "mt calor na linha 3"
+      ]
+    },
+    {
+      "topic_id": 54,
+      "volume_relatos": 8,
+      "share_pct": 0.008,
+      "top_terms": [
+        "producao",
+        "falha",
+        "na",
+        "meio",
+        "le",
+        "mas"
+      ],
+      "setor": "industria",
+      "examples": [
+        "falha na producao mas n ajuda",
+        "falha na producao mal ajustado",
+        "falha na producao pela manha",
+        "falha na producao n le direito",
+        "falha na producao temp bugado",
+        "falha na producao no meio do turno",
+        "falha na producao desalinhado"
+      ]
+    },
+    {
+      "topic_id": 55,
+      "volume_relatos": 8,
+      "share_pct": 0.008,
+      "top_terms": [
+        "funciona",
+        "scanner",
+        "nao",
+        "urgencia",
+        "com",
+        "desnecessario"
+      ],
+      "setor": "cd",
+      "examples": [
+        "scanner n funciona",
+        "scanner n funciona manual",
+        "scanner nao funciona direito",
+        "scanner n funciona desnecessario",
+        "scanner n funciona com urgencia"
+      ]
+    },
+    {
+      "topic_id": 56,
+      "volume_relatos": 8,
+      "share_pct": 0.008,
+      "top_terms": [
+        "refeita",
+        "separacao",
+        "resultado",
+        "por",
+        "estoque"
+      ],
+      "setor": "cd",
+      "examples": [
+        "separacao refeita resultado",
+        "separacao refeita por estoque",
+        "separacao refeita"
+      ]
+    },
+    {
+      "topic_id": 57,
+      "volume_relatos": 8,
+      "share_pct": 0.008,
+      "top_terms": [
+        "pessima",
+        "ventilacao",
+        "setup",
+        "setor",
+        "mas",
+        "ajuda"
+      ],
+      "setor": "industria",
+      "examples": [
+        "ventilacao pessima no setor b",
+        "ventilacao pessima temp bugado",
+        "ventilacao pessima ngm",
+        "ventilacao pessima desalinhado",
+        "ventilacao pessima mas n ajuda",
+        "ventilacao pessima confusa",
+        "ventilacao pessima de setup"
+      ]
+    },
+    {
+      "topic_id": 58,
+      "volume_relatos": 7,
+      "share_pct": 0.007,
+      "top_terms": [
+        "atualiza",
+        "sistema",
+        "nao",
+        "armazem",
+        "aviso",
+        "manual"
+      ],
+      "setor": "cd",
+      "examples": [
+        "sistema n atualiza no armazem 4",
+        "sistema n atualiza sem aviso",
+        "sistema nao atualiza estoque",
+        "sistema n atualiza manual",
+        "sistema n atualiza"
+      ]
+    },
+    {
+      "topic_id": 59,
+      "volume_relatos": 7,
+      "share_pct": 0.007,
+      "top_terms": [
+        "errada",
+        "etiqueta",
+        "aviso",
+        "dnv",
+        "sem"
+      ],
+      "setor": "cd",
+      "examples": [
+        "etiqueta errada dnv",
+        "etiqueta errada sem aviso",
+        "etiqueta errada"
+      ]
+    }
+  ]
+}

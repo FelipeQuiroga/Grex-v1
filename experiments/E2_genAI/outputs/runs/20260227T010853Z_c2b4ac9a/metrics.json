@@ -1,0 +1,50 @@
+{
+  "total_topics": 86,
+  "total_volume": 1000,
+  "status_pct": {
+    "OK": 0.7791,
+    "REVISAR": 0.2209,
+    "EMERGENTE": 0.0
+  },
+  "ok_volume_pct": 0.832,
+  "emergent_volume_pct": 0.0,
+  "confidence_avg": 0.6628,
+  "macro_distribution": {
+    "Infraestrutura e Equipamentos": {
+      "topic_count": 10,
+      "volume": 91,
+      "volume_pct": 0.091
+    },
+    "Pessoas e Capacidade": {
+      "topic_count": 19,
+      "volume": 221,
+      "volume_pct": 0.221
+    },
+    "Planejamento e Priorizacao": {
+      "topic_count": 1,
+      "volume": 10,
+      "volume_pct": 0.01
+    },
+    "Processos e Governanca": {
+      "topic_count": 12,
+      "volume": 138,
+      "volume_pct": 0.138
+    },
+    "Qualidade e Compliance": {
+      "topic_count": 11,
+      "volume": 141,
+      "volume_pct": 0.141
+    },
+    "Seguranca e Riscos": {
+      "topic_count": 5,
+      "volume": 73,
+      "volume_pct": 0.073
+    },
+    "Sistemas e Dados": {
+      "topic_count": 28,
+      "volume": 326,
+      "volume_pct": 0.326
+    }
+  },
+  "status_mismatch_count": 5
+}

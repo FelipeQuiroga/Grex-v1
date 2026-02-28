@@ -1,0 +1,520 @@
+{
+  "mappings": [
+    {
+      "topic_id": 0,
+      "macro_theme": "Seguranca e Riscos",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 1,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 2,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 3,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 4,
+      "macro_theme": "Processos e Governanca",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 5,
+      "macro_theme": "Infraestrutura e Equipamentos",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 6,
+      "macro_theme": "Qualidade e Compliance",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 7,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 8,
+      "macro_theme": "Processos e Governanca",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 9,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 10,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 11,
+      "macro_theme": "Processos e Governanca",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 12,
+      "macro_theme": "Qualidade e Compliance",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 13,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 14,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 15,
+      "macro_theme": "Infraestrutura e Equipamentos",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 16,
+      "macro_theme": "Qualidade e Compliance",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 17,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 18,
+      "macro_theme": "Processos e Governanca",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 19,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 20,
+      "macro_theme": "Qualidade e Compliance",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 21,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 22,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 23,
+      "macro_theme": "Seguranca e Riscos",
+      "confidence": "MEDIUM",
+      "status": "REVISAR"
+    },
+    {
+      "topic_id": 24,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 25,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "LOW",
+      "status": "EMERGENTE"
+    },
+    {
+      "topic_id": 26,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 27,
+      "macro_theme": "Qualidade e Compliance",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 28,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "LOW",
+      "status": "EMERGENTE"
+    },
+    {
+      "topic_id": 29,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 30,
+      "macro_theme": "Qualidade e Compliance",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 31,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 32,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "LOW",
+      "status": "EMERGENTE"
+    },
+    {
+      "topic_id": 33,
+      "macro_theme": "Qualidade e Compliance",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 34,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 35,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "LOW",
+      "status": "EMERGENTE"
+    },
+    {
+      "topic_id": 36,
+      "macro_theme": "Qualidade e Compliance",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 37,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 38,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "LOW",
+      "status": "EMERGENTE"
+    },
+    {
+      "topic_id": 39,
+      "macro_theme": "Qualidade e Compliance",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 40,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 41,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 42,
+      "macro_theme": "Qualidade e Compliance",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 43,
+      "macro_theme": "Planejamento e Priorizacao",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 44,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "MEDIUM",
+      "status": "REVISAR"
+    },
+    {
+      "topic_id": 45,
+      "macro_theme": "Infraestrutura e Equipamentos",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 46,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "MEDIUM",
+      "status": "REVISAR"
+    },
+    {
+      "topic_id": 47,
+      "macro_theme": "Processos e Governanca",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 48,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "MEDIUM",
+      "status": "REVISAR"
+    },
+    {
+      "topic_id": 49,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 50,
+      "macro_theme": "Processos e Governanca",
+      "confidence": "MEDIUM",
+      "status": "REVISAR"
+    },
+    {
+      "topic_id": 51,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 52,
+      "macro_theme": "Infraestrutura e Equipamentos",
+      "confidence": "MEDIUM",
+      "status": "REVISAR"
+    },
+    {
+      "topic_id": 53,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 54,
+      "macro_theme": "Processos e Governanca",
+      "confidence": "MEDIUM",
+      "status": "REVISAR"
+    },
+    {
+      "topic_id": 55,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 56,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "MEDIUM",
+      "status": "REVISAR"
+    },
+    {
+      "topic_id": 57,
+      "macro_theme": "Infraestrutura e Equipamentos",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 58,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "MEDIUM",
+      "status": "REVISAR"
+    },
+    {
+      "topic_id": 59,
+      "macro_theme": "Processos e Governanca",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 60,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 61,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 62,
+      "macro_theme": "Processos e Governanca",
+      "confidence": "LOW",
+      "status": "REVISAR"
+    },
+    {
+      "topic_id": 63,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 64,
+      "macro_theme": "Seguranca e Riscos",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 65,
+      "macro_theme": "Processos e Governanca",
+      "confidence": "LOW",
+      "status": "REVISAR"
+    },
+    {
+      "topic_id": 66,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 67,
+      "macro_theme": "Seguranca e Riscos",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 68,
+      "macro_theme": "Processos e Governanca",
+      "confidence": "LOW",
+      "status": "REVISAR"
+    },
+    {
+      "topic_id": 69,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 70,
+      "macro_theme": "Infraestrutura e Equipamentos",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 71,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 72,
+      "macro_theme": "Processos e Governanca",
+      "confidence": "LOW",
+      "status": "REVISAR"
+    },
+    {
+      "topic_id": 73,
+      "macro_theme": "Infraestrutura e Equipamentos",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 74,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 75,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 76,
+      "macro_theme": "Infraestrutura e Equipamentos",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 77,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 78,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 79,
+      "macro_theme": "Sistemas e Dados",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 80,
+      "macro_theme": "Qualidade e Compliance",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 81,
+      "macro_theme": "Infraestrutura e Equipamentos",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 82,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "HIGH",
+      "status": "OK"
+    },
+    {
+      "topic_id": 83,
+      "macro_theme": "Infraestrutura e Equipamentos",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    },
+    {
+      "topic_id": 84,
+      "macro_theme": "Pessoas e Capacidade",
+      "confidence": "LOW",
+      "status": "REVISAR"
+    },
+    {
+      "topic_id": 85,
+      "macro_theme": "Seguranca e Riscos",
+      "confidence": "MEDIUM",
+      "status": "OK"
+    }
+  ]
+}
