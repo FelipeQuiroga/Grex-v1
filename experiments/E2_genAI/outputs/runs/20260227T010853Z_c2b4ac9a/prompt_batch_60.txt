@@ -1,0 +1,439 @@
+Voce e um classificador de topicos para macrotemas pre-definidos.
+Sua tarefa e classificar cada topic_id em exatamente um macrotema desta taxonomia fixa.
+
+Regras obrigatorias:
+- Classifique apenas dentro desses macrotemas.
+- Nao crie novos macrotemas.
+- Cada topic_id deve mapear para exatamente 1 macro_theme.
+- confidence deve ser: HIGH | MEDIUM | LOW.
+- status deve ser: OK | REVISAR | EMERGENTE.
+- Regra objetiva para EMERGENTE:
+  * confidence == LOW
+  * volume_relatos >= 5
+  * share_pct >= 0.02
+- Se qualquer condicao acima falhar, nao use EMERGENTE.
+- Retorne apenas JSON valido. Nenhum texto fora do JSON.
+
+Taxonomia macro fixa (use apenas itens desta lista):
+[
+  "Pessoas e Capacidade",
+  "Processos e Governanca",
+  "Planejamento e Priorizacao",
+  "Sistemas e Dados",
+  "Infraestrutura e Equipamentos",
+  "Qualidade e Compliance",
+  "Seguranca e Riscos",
+  "Clientes e Atendimento"
+]
+
+Formato de saida (JSON estrito **SEM NENHUM TEXTO ADICIONAL**):
+```json
+{
+  "mappings": [
+    {
+      "topic_id": 0,
+      "macro_theme": "string",
+      "confidence": "HIGH|MEDIUM|LOW",
+      "status": "OK|REVISAR|EMERGENTE"
+    }
+  ]
+}
+```
+
+Aqui esta o payload agregado de topicos:
+{
+  "topics": [
+    {
+      "topic_id": 60,
+      "volume_relatos": 7,
+      "share_pct": 0.007,
+      "top_terms": [
+        "organizacao",
+        "doca",
+        "sem",
+        "dnv",
+        "turno",
+        "no"
+      ],
+      "setor": "cd",
+      "examples": [
+        "doca sem organizacao dnv",
+        "doca sem organizacao",
+        "doca sem organizacao no turno"
+      ]
+    },
+    {
+      "topic_id": 61,
+      "volume_relatos": 7,
+      "share_pct": 0.007,
+      "top_terms": [
+        "quebrado",
+        "palete",
+        "endereco",
+        "armazem",
+        "por",
+        "no"
+      ],
+      "setor": "cd",
+      "examples": [
+        "palete quebrado no armazem 4",
+        "palete quebrado",
+        "palete quebrado por endereco"
+      ]
+    },
+    {
+      "topic_id": 62,
+      "volume_relatos": 7,
+      "share_pct": 0.007,
+      "top_terms": [
+        "incompleto",
+        "pedido",
+        "pela",
+        "manha",
+        "por",
+        "erro"
+      ],
+      "setor": "cd",
+      "examples": [
+        "pedido incompleto",
+        "pedido incompleto por erro",
+        "pedido incompleto pela manha"
+      ]
+    },
+    {
+      "topic_id": 63,
+      "volume_relatos": 7,
+      "share_pct": 0.007,
+      "top_terms": [
+        "deslocamento",
+        "mt",
+        "desnecessario",
+        "manual"
+      ],
+      "setor": "cd",
+      "examples": [
+        "mt deslocamento manual",
+        "mt deslocamento",
+        "mt deslocamento desnecessario"
+      ]
+    },
+    {
+      "topic_id": 64,
+      "volume_relatos": 7,
+      "share_pct": 0.007,
+      "top_terms": [
+        "caiu",
+        "sistema",
+        "meio",
+        "enderecos",
+        "do",
+        "pela"
+      ],
+      "setor": "cd",
+      "examples": [
+        "sistema caiu pela manha",
+        "sistema bugado por erro",
+        "sistema caiu enderecos",
+        "sistema caiu",
+        "sistema caiu no meio do turno",
+        "sistema caiu hj"
+      ]
+    },
+    {
+      "topic_id": 65,
+      "volume_relatos": 7,
+      "share_pct": 0.007,
+      "top_terms": [
+        "desorganizado",
+        "estoque",
+        "direito",
+        "hj"
+      ],
+      "setor": "cd",
+      "examples": [
+        "estoque desorganizado",
+        "estoque desorganizado direito",
+        "estoque desorganizado hj"
+      ]
+    },
+    {
+      "topic_id": 66,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "ilegivel",
+        "etiqueta",
+        "armazem",
+        "direito",
+        "por",
+        "estoque"
+      ],
+      "setor": "cd",
+      "examples": [
+        "etiqueta ilegivel por estoque",
+        "etiqueta ilegivel no armazem 4",
+        "etiqueta ilegivel",
+        "etiqueta ilegivel direito"
+      ]
+    },
+    {
+      "topic_id": 67,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "bateria",
+        "sem",
+        "empilhadeira",
+        "descarregar",
+        "congestionada",
+        "falhando"
+      ],
+      "setor": "cd",
+      "examples": [
+        "fila grande p descarregar sem bateria",
+        "empilhadeira falhando sem bateria",
+        "empilhadeira parada sem bateria",
+        "estoque mal enderecado sem bateria",
+        "doca congestionada sem bateria"
+      ]
+    },
+    {
+      "topic_id": 68,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "incompleta",
+        "equipe",
+        "hj",
+        "resultado"
+      ],
+      "setor": "cd",
+      "examples": [
+        "equipe incompleta resultado",
+        "equipe incompleta",
+        "equipe incompleta hj"
+      ]
+    },
+    {
+      "topic_id": 69,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "confuso",
+        "picking",
+        "suficiente"
+      ],
+      "setor": "cd",
+      "examples": [
+        "picking confuso",
+        "picking confuso suficiente"
+      ]
+    },
+    {
+      "topic_id": 70,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "pesado",
+        "ambiente",
+        "feito",
+        "sobrecarregado",
+        "troca",
+        "desalinhado"
+      ],
+      "setor": "industria",
+      "examples": [
+        "ambiente pesado sobrecarregado",
+        "ambiente pesado hj",
+        "ambiente pesado na troca de turno",
+        "ambiente pesado feito errado",
+        "ambiente pesado desalinhado",
+        "ambiente pesado de setup"
+      ]
+    },
+    {
+      "topic_id": 71,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "fria",
+        "comida",
+        "eletrica",
+        "toda",
+        "hora",
+        "setor"
+      ],
+      "setor": "industria",
+      "examples": [
+        "comida fria ngm",
+        "comida fria no setor b",
+        "comida fria no refeitorio",
+        "comida fria temp bugado",
+        "comida fria toda hora",
+        "comida fria por falha eletrica"
+      ]
+    },
+    {
+      "topic_id": 72,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "voltou",
+        "pedido",
+        "errado",
+        "hj",
+        "turno",
+        "no"
+      ],
+      "setor": "cd",
+      "examples": [
+        "pedido voltou errado hj",
+        "pedido voltou errado no turno",
+        "pedido voltou errado"
+      ]
+    },
+    {
+      "topic_id": 73,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "horas",
+        "extras",
+        "excesso",
+        "de",
+        "eletrica",
+        "falha"
+      ],
+      "setor": "industria",
+      "examples": [
+        "excesso de horas extras de setup",
+        "excesso de horas extras na troca de turno",
+        "excesso de horas extras",
+        "excesso de horas extras por falha eletrica",
+        "excesso de horas extras ngm",
+        "excesso de horas extras confusa"
+      ]
+    },
+    {
+      "topic_id": 74,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "separacao",
+        "erro",
+        "endereco",
+        "na",
+        "por",
+        "estoque"
+      ],
+      "setor": "cd",
+      "examples": [
+        "erro na separacao por endereco",
+        "erro na separacao",
+        "erro na separacao estoque"
+      ]
+    },
+    {
+      "topic_id": 75,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "produto",
+        "danificado",
+        "urgencia",
+        "com",
+        "enderecos",
+        "novo"
+      ],
+      "setor": "cd",
+      "examples": [
+        "produto danificado novo operador",
+        "produto danificado com urgencia",
+        "produto danificado",
+        "produto danificado enderecos"
+      ]
+    },
+    {
+      "topic_id": 76,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "nas",
+        "dor",
+        "costas",
+        "supervisor",
+        "pelo",
+        "depois"
+      ],
+      "setor": "industria",
+      "examples": [
+        "dor nas costas demais",
+        "dor nas costas na prensa",
+        "dor nas costas mal ajustado",
+        "dor nas costas pelo supervisor",
+        "dor nas costas depois do turno"
+      ]
+    },
+    {
+      "topic_id": 77,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "pra",
+        "sobrecarregada",
+        "picking",
+        "rota",
+        "parada",
+        "retrabalho"
+      ],
+      "setor": "cd",
+      "examples": [
+        "rota sobrecarregada pra picking",
+        "retrabalho na rota pra picking",
+        "empilhadeira parada pra picking"
+      ]
+    },
+    {
+      "topic_id": 78,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "caminhao",
+        "atrasado",
+        "enderecos",
+        "frequente",
+        "por",
+        "estoque"
+      ],
+      "setor": "cd",
+      "examples": [
+        "caminhao atrasado estoque",
+        "caminhao atrasado frequente",
+        "caminhao atrasado",
+        "caminhao atrasado por erro",
+        "caminhao atrasado enderecos"
+      ]
+    },
+    {
+      "topic_id": 79,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "palete",
+        "errado",
+        "carregado",
+        "estoque",
+        "dnv",
+        "por"
+      ],
+      "setor": "cd",
+      "examples": [
+        "palete errado dnv",
+        "palete errado",
+        "palete errado por estoque",
+        "palete errado estoque",
+        "palete errado carregado"
+      ]
+    }
+  ]
+}

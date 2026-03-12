@@ -26,6 +26,7 @@ def _agent_log(
 ) -> None:
     """Pequeno logger para debug da sessão atual."""
     try:
+        # Coloca o ficheiro de log na raiz do projeto mvp-validation
         log_path = _Path(__file__).resolve().parents[4] / "debug-a8a80a.log"
         payload = {
             "sessionId": "a8a80a",
@@ -58,47 +59,13 @@ class LLMClient:
         raise ValueError(f"Unsupported provider: {self.config.provider}")
 
     def _call_ollama(self, prompt: str) -> str:
-        # region agent log
-        _agent_log(
-            run_id="run-e2",
-            hypothesis_id="H1",
-            location="e2.llm_client:_call_ollama",
-            message="ollama call start",
-            data={"prompt_len": len(prompt)},
-        )
-        # endregion agent log
-
         url = "http://127.0.0.1:11434/api/generate"
         payload = {"model": self.config.model, "prompt": prompt, "stream": False}
-        start_ts = time.time()
-        try:
-            response = requests.post(url, json=payload, timeout=self.config.timeout_sec)
-            elapsed = time.time() - start_ts
-            # region agent log
-            _agent_log(
-                run_id="run-e2",
-                hypothesis_id="H1",
-                location="e2.llm_client:_call_ollama",
-                message="ollama response ok",
-                data={"elapsed_sec": elapsed, "status_code": response.status_code},
-            )
-            # endregion agent log
-        except requests.RequestException as exc:
-            elapsed = time.time() - start_ts
-            # region agent log
-            _agent_log(
-                run_id="run-e2",
-                hypothesis_id="H1",
-                location="e2.llm_client:_call_ollama",
-                message="ollama request exception",
-                data={"elapsed_sec": elapsed, "error": str(exc)},
-            )
-            # endregion agent log
-            raise
-
+        response = requests.post(url, json=payload, timeout=self.config.timeout_sec)
         response.raise_for_status()
         data = response.json()
         return data.get("response", "")
+
 
     def _call_openai(self, prompt: str) -> str:
         raise ValueError("OpenAI provider not configured for this experiment.")
