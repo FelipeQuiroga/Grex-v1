@@ -6,6 +6,7 @@ from pathlib import Path
 import yaml
 
 from e2.aggregate import aggregate_topics
+from e2.ambiguity import assess_ambiguity, merge_classification_with_ambiguity
 from e2.io import (
     ensure_output_dir,
     filter_dataframe,
@@ -18,6 +19,7 @@ from e2.llm_client import LLMClient, LLMConfig, generate_with_retry
 from e2.postprocess import compute_metrics
 from e2.prompt_builder import build_prompt, build_repair_prompt
 from e2.schema import parse_and_validate
+from e2.taxonomy import TAXONOMY_VERSION, load_taxonomy
 from e2.versioning import create_run_dir, generate_run_id, write_manifest
 
 
@@ -26,8 +28,21 @@ def load_config(path: str | Path) -> dict:
         return yaml.safe_load(handle)
 
 
+def resolve_rules(config: dict) -> dict:
+    rules = dict(config.get("rules", {}))
+    taxonomy_version = rules.get("taxonomy_version", TAXONOMY_VERSION)
+    taxonomy = load_taxonomy(taxonomy_version)
+
+    rules["taxonomy_version"] = taxonomy_version
+    rules["taxonomy"] = taxonomy
+    rules["macro_taxonomy"] = list(taxonomy.keys())
+    return rules
+
+
 def run_pipeline(config_path: str | Path) -> int:
     config = load_config(config_path)
+    config["rules"] = resolve_rules(config)
+
     run_id = generate_run_id()
     outputs_dir = ensure_output_dir(config["run"]["outputs_base_dir"])
     run_dir = create_run_dir(outputs_dir, run_id)
@@ -48,7 +63,6 @@ def run_pipeline(config_path: str | Path) -> int:
     )
     write_json(run_dir / "input_topics.json", topics_payload)
 
-    # --- INÍCIO DA REFATORAÇÃO DE BATCHING ---
     llm_config = LLMConfig(
         provider=config["llm"]["provider"],
         model=config["llm"]["model"],
@@ -56,27 +70,25 @@ def run_pipeline(config_path: str | Path) -> int:
         retries=config["llm"]["retries"],
     )
     client = LLMClient(llm_config)
-    
+
     all_topics = topics_payload["topics"]
-    batch_size = config["llm"].get("batch_size", 20) # Recomendado entre 10 e 20
-    
-    final_mappings = []
+    batch_size = config["llm"].get("batch_size", 20)
+
+    final_classifications = []
     global_errors = []
-    
-    # Fatiando a lista de tópicos em lotes
+
     for i in range(0, len(all_topics), batch_size):
         batch_topics = all_topics[i : i + batch_size]
         batch_payload = {"topics": batch_topics}
         batch_topic_ids = [t["topic_id"] for t in batch_topics]
-        
+
         prompt = build_prompt(batch_payload, config["rules"])
-        
-        # Salva prompts por batch para debug (opcional)
         write_text(run_dir / f"prompt_batch_{i}.txt", prompt)
 
         batch_validated = None
         batch_errors = []
-        
+        raw_response = ""
+
         try:
             raw_response, _ = generate_with_retry(client, prompt, llm_config.retries)
             batch_validated, batch_errors = parse_and_validate(
@@ -85,7 +97,6 @@ def run_pipeline(config_path: str | Path) -> int:
         except Exception as exc:
             batch_errors = [f"Falha na chamada LLM (Batch {i}): {exc}"]
 
-        # Lógica de Repair para o Batch atual
         if batch_errors and raw_response:
             repair_prompt = build_repair_prompt(raw_response, batch_errors)
             try:
@@ -96,24 +107,34 @@ def run_pipeline(config_path: str | Path) -> int:
             except Exception as exc:
                 batch_errors = batch_errors + [f"Falha no repair prompt (Batch {i}): {exc}"]
 
-        # Consolidando resultados ou erros
         if batch_validated and not batch_errors:
-            final_mappings.extend(batch_validated["mappings"])
+            final_classifications.extend(batch_validated["classifications"])
         else:
             global_errors.extend(batch_errors)
 
-    # --- FIM DA REFATORAÇÃO DE BATCHING ---
-
     status = "SUCCESS" if not global_errors else "FAILED"
-    
-    if final_mappings:
-        # Remonta o payload validado completo no formato esperado
-        consolidated_result = {"mappings": final_mappings}
+
+    if final_classifications:
+        classifications_payload = {
+            "classifications": sorted(
+                final_classifications, key=lambda item: int(item["topic_id"])
+            )
+        }
+        write_json(run_dir / "classification_result.json", classifications_payload)
+
+        ambiguity_payload = assess_ambiguity(
+            classifications_payload, topics_payload, config["rules"]
+        )
+        write_json(run_dir / "ambiguity_result.json", ambiguity_payload)
+
+        consolidated_result = merge_classification_with_ambiguity(
+            classifications_payload, ambiguity_payload
+        )
         write_json(run_dir / "result.json", consolidated_result)
-        
+
         metrics = compute_metrics(consolidated_result, topics_payload, config["rules"])
         write_json(run_dir / "metrics.json", metrics)
-        
+
     if global_errors:
         write_text(run_dir / "validation_errors.txt", json.dumps(global_errors, indent=2))
 

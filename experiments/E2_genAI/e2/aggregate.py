@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import hashlib
+import re
+import unicodedata
 from collections import Counter
 from typing import Iterable
 
@@ -35,6 +37,56 @@ def _extract_top_terms(values: Iterable[str], top_k: int) -> list[str]:
     return most_common
 
 
+STOPWORDS = {
+    "de",
+    "da",
+    "do",
+    "das",
+    "dos",
+    "na",
+    "no",
+    "nas",
+    "nos",
+    "e",
+    "o",
+    "a",
+    "os",
+    "as",
+    "pra",
+    "por",
+    "com",
+    "sem",
+    "hj",
+    "dnv",
+    "ngm",
+    "msm",
+}
+
+
+def _tokenize_text(value: str) -> list[str]:
+    normalized = unicodedata.normalize("NFKD", value.lower())
+    normalized = "".join(ch for ch in normalized if not unicodedata.combining(ch))
+    return re.findall(r"[a-z0-9]+", normalized)
+
+
+def _extract_salient_terms(examples: Iterable[str], *, top_k: int) -> list[str]:
+    counter: Counter[str] = Counter()
+    for example in examples:
+        for token in _tokenize_text(example):
+            if len(token) < 3:
+                continue
+            if token in STOPWORDS:
+                continue
+            counter[token] += 1
+    return [token for token, _ in counter.most_common(top_k)]
+
+
+def _setor_distribution(values: Iterable[str]) -> dict[str, int]:
+    normalized = [value for value in values if isinstance(value, str) and value]
+    counts = Counter(normalized)
+    return dict(sorted(counts.items(), key=lambda item: (-item[1], item[0])))
+
+
 def aggregate_topics(
     df: pd.DataFrame,
     *,
@@ -56,10 +108,13 @@ def aggregate_topics(
         else:
             examples = _deterministic_sample(examples_source, examples_per_topic)
         sector = ""
+        setor_distribution: dict[str, int] = {}
         if "setor" in group.columns:
             sector_counts = group["setor"].value_counts()
             if not sector_counts.empty:
                 sector = sector_counts.index[0]
+            setor_distribution = _setor_distribution(group["setor"].tolist())
+        salient_terms = _extract_salient_terms(examples_source, top_k=max(top_terms_k, 12))
         topics_payload.append(
             {
                 "topic_id": int(topic_id),
@@ -67,7 +122,13 @@ def aggregate_topics(
                 "share_pct": share_pct,
                 "top_terms": top_terms,
                 "setor": sector,
+                "setor_distribution": setor_distribution,
                 "examples": examples,
+                "contexto_operacional": {
+                    "salient_terms": salient_terms,
+                    "examples_preview": examples[:3],
+                    "sample_method": sample_method,
+                },
             }
         )
     topics_payload = sorted(topics_payload, key=lambda item: item["topic_id"])

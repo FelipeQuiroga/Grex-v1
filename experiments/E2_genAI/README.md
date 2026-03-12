@@ -106,3 +106,24 @@ Em `outputs/runs/<run_id>/`:
 ### ObservaÃ§Ãµes
 - Se houver erro de validaÃ§Ã£o, o pipeline tenta um repair automÃ¡tico.
 - O status final fica registrado no `manifest.json`.
+
+## E2 v3 - Classificação Operacional Auditável
+
+A versão v3 separa a etapa de classificação da etapa de ambiguidade.
+
+### Fluxo atualizado
+1. Agrega tópicos com contexto ampliado (`top_terms`, `examples`, `setor`, `setor_distribution`, `contexto_operacional`).
+2. Carrega taxonomia versionada em `e2/taxonomy.py` via `rules.taxonomy_version`.
+3. Envia prompt com definições operacionais, exemplos e contraexemplos.
+4. LLM classifica somente `macro_theme` por `topic_id`.
+5. Etapa determinística calcula `confidence` e `status` com base nos sinais da taxonomia.
+6. Pipeline consolida e gera métricas.
+
+### Novos artefatos
+- `classification_result.json`: saída validada da classificação do LLM.
+- `ambiguity_result.json`: análise de ambiguidade com motivo e sinais.
+- `result.json`: payload consolidado (`classifications`, `ambiguity_analysis`, `mappings`).
+
+### Configuração principal
+- `rules.taxonomy_version`: versão da taxonomia operacional.
+- `rules.thresholds.*`: limiares para marcação de `EMERGENTE` e revisão.

@@ -18,15 +18,7 @@ llm:
   batch_size: 20
 
 rules:
-  macro_taxonomy:
-    - "Pessoas e Capacidade"
-    - "Processos e Governanca"
-    - "Planejamento e Priorizacao"
-    - "Sistemas e Dados"
-    - "Infraestrutura e Equipamentos"
-    - "Qualidade e Compliance"
-    - "Seguranca e Riscos"
-    - "Clientes e Atendimento"
+  taxonomy_version: "macrothemes_v1_operacional_2026_03"
   thresholds:
     confidence_low_threshold: "LOW"
     emergent_min_volume_abs: 5
@@ -35,4 +27,4 @@ rules:
 
 run:
   outputs_base_dir: "./outputs/runs"
-  prompt_version: "e2_v2_fixed_taxonomy"
+  prompt_version: "e2_v3_operational_taxonomy"

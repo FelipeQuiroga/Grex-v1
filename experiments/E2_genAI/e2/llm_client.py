@@ -26,6 +26,7 @@ def _agent_log(
 ) -> None:
     """Pequeno logger para debug da sessão atual."""
     try:
+        # Coloca o ficheiro de log na raiz do projeto mvp-validation
         log_path = _Path(__file__).resolve().parents[4] / "debug-a8a80a.log"
         payload = {
             "sessionId": "a8a80a",
@@ -58,7 +59,7 @@ class LLMClient:
         raise ValueError(f"Unsupported provider: {self.config.provider}")
 
     def _call_ollama(self, prompt: str) -> str:
-        url = "http://localhost:11434/api/generate"
+        url = "http://127.0.0.1:11434/api/generate"
         payload = {"model": self.config.model, "prompt": prompt, "stream": False}
         response = requests.post(url, json=payload, timeout=self.config.timeout_sec)
         response.raise_for_status()

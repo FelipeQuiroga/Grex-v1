@@ -5,20 +5,15 @@ import re
 from typing import Iterable
 
 
-VALID_CONFIDENCE = {"HIGH", "MEDIUM", "LOW"}
-VALID_STATUS = {"OK", "REVISAR", "EMERGENTE"}
-
-
 def parse_json(raw: str) -> tuple[dict | None, list[str]]:
     cleaned_text = raw.strip()
 
-    # strip markdown code fences if present
     if "```" in cleaned_text:
-        match = re.search(r'```(?:json)?(.*?)```', cleaned_text, re.DOTALL | re.IGNORECASE)
+        match = re.search(r"```(?:json)?(.*?)```", cleaned_text, re.DOTALL | re.IGNORECASE)
         if match:
             cleaned_text = match.group(1).strip()
     else:
-        match = re.search(r'(\{.*\})', cleaned_text, re.DOTALL)
+        match = re.search(r"(\{.*\})", cleaned_text, re.DOTALL)
         if match:
             cleaned_text = match.group(1).strip()
 
@@ -26,8 +21,7 @@ def parse_json(raw: str) -> tuple[dict | None, list[str]]:
         payload = json.loads(cleaned_text)
         return payload, []
     except json.JSONDecodeError as exc:
-        # keep original raw for debugging
-        return None, [f"JSON inválido: {exc}", f"raw text: {cleaned_text!r}"]
+        return None, [f"JSON invalido: {exc}", f"raw text: {cleaned_text!r}"]
 
 
 def _as_int_topic_id(value: object) -> tuple[int | None, str | None]:
@@ -37,6 +31,14 @@ def _as_int_topic_id(value: object) -> tuple[int | None, str | None]:
         return int(value), None
     except (TypeError, ValueError):
         return None, f"topic_id invalido: {value!r}"
+
+
+def _allowed_macrothemes(rules: dict) -> set[str]:
+    taxonomy = rules.get("taxonomy")
+    if isinstance(taxonomy, dict) and taxonomy:
+        return set(taxonomy.keys())
+    macro_taxonomy = rules.get("macro_taxonomy", [])
+    return set(macro_taxonomy)
 
 
 def validate_payload(
@@ -49,69 +51,63 @@ def validate_payload(
     if not isinstance(payload, dict):
         return ["Payload deve ser um objeto JSON."]
 
-    allowed_top_level = {"mappings"}
+    allowed_top_level = {"classifications"}
     top_level_keys = set(payload.keys())
     extra_top_level = sorted(top_level_keys - allowed_top_level)
     if extra_top_level:
         errors.append(
-            f"Campos de topo nao permitidos: {extra_top_level}. Use apenas 'mappings'."
+            f"Campos de topo nao permitidos: {extra_top_level}. Use apenas 'classifications'."
         )
 
-    mappings = payload.get("mappings")
-    if not isinstance(mappings, list):
-        errors.append("Campo mappings ausente ou invalido.")
+    classifications = payload.get("classifications")
+    if not isinstance(classifications, list):
+        errors.append("Campo classifications ausente ou invalido.")
         return errors
 
-    macro_taxonomy = rules["macro_taxonomy"]
     forbid_new_macrothemes = bool(rules.get("forbid_new_macrothemes", True))
-    thresholds = rules.get("thresholds", {})
-    confidence_low_threshold = thresholds.get("confidence_low_threshold", "LOW")
-    allowed_macrothemes = set(macro_taxonomy)
+    allowed_macrothemes = _allowed_macrothemes(rules)
 
-    expected_keys = {"topic_id", "macro_theme", "confidence", "status"}
+    expected_keys = {"topic_id", "macro_theme", "rationale"}
     mapping_ids: list[int] = []
-    for mapping in mappings:
-        if not isinstance(mapping, dict):
-            errors.append("Cada mapping deve ser um objeto JSON.")
+    for item in classifications:
+        if not isinstance(item, dict):
+            errors.append("Cada classificacao deve ser um objeto JSON.")
             continue
 
-        extra_keys = sorted(set(mapping.keys()) - expected_keys)
+        extra_keys = sorted(set(item.keys()) - expected_keys)
         if extra_keys:
             errors.append(
-                f"Campos extras no mapping de topic_id {mapping.get('topic_id')}: {extra_keys}"
+                f"Campos extras na classificacao de topic_id {item.get('topic_id')}: {extra_keys}"
             )
 
-        missing_keys = sorted(expected_keys - set(mapping.keys()))
+        missing_keys = sorted(expected_keys - set(item.keys()))
         if missing_keys:
             errors.append(
-                f"Campos obrigatorios ausentes no mapping de topic_id {mapping.get('topic_id')}: {missing_keys}"
+                "Campos obrigatorios ausentes na classificacao de "
+                f"topic_id {item.get('topic_id')}: {missing_keys}"
             )
             continue
 
-        topic_id, topic_error = _as_int_topic_id(mapping.get("topic_id"))
+        topic_id, topic_error = _as_int_topic_id(item.get("topic_id"))
         if topic_error:
             errors.append(topic_error)
         else:
             mapping_ids.append(topic_id)
 
-        macro_theme = mapping.get("macro_theme")
+        macro_theme = item.get("macro_theme")
         if not isinstance(macro_theme, str) or not macro_theme.strip():
-            errors.append(f"macro_theme invalido para topic_id {mapping.get('topic_id')}.")
+            errors.append(f"macro_theme invalido para topic_id {item.get('topic_id')}.")
         elif forbid_new_macrothemes and macro_theme not in allowed_macrothemes:
             errors.append(
-                f"Macrotema invalido para topic_id {mapping.get('topic_id')}: '{macro_theme}'."
+                f"Macrotema invalido para topic_id {item.get('topic_id')}: '{macro_theme}'."
             )
 
-        if mapping.get("confidence") not in VALID_CONFIDENCE:
-            errors.append(f"Confianca invalida para topic_id {mapping.get('topic_id')}.")
-
-        if mapping.get("status") not in VALID_STATUS:
-            errors.append(f"Status invalido para topic_id {mapping.get('topic_id')}.")
-        elif mapping.get("status") == "EMERGENTE" and mapping.get(
-            "confidence"
-        ) != confidence_low_threshold:
+        rationale = item.get("rationale")
+        if not isinstance(rationale, str) or not rationale.strip():
+            errors.append(f"rationale invalido para topic_id {item.get('topic_id')}.")
+        elif len(rationale) > 280:
             errors.append(
-                f"topic_id {mapping.get('topic_id')} marcado como EMERGENTE sem confidence {confidence_low_threshold}."
+                f"rationale muito longo para topic_id {item.get('topic_id')} (max 280 chars)."
             )
 
     duplicate_ids = sorted(
@@ -123,11 +119,11 @@ def validate_payload(
     topic_ids_set = set(topic_ids)
     missing_ids = sorted(topic_ids_set - set(mapping_ids))
     if missing_ids:
-        errors.append(f"Topicos sem mapeamento: {missing_ids}")
+        errors.append(f"Topicos sem classificacao: {missing_ids}")
 
     extra_ids = sorted(set(mapping_ids) - topic_ids_set)
     if extra_ids:
-        errors.append(f"Topicos inesperados no mapeamento: {extra_ids}")
+        errors.append(f"Topicos inesperados na classificacao: {extra_ids}")
 
     return errors
 
