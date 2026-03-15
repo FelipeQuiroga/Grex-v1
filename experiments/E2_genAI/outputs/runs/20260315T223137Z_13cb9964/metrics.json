@@ -1,0 +1,30 @@
+{
+  "total_topics": 6,
+  "total_volume": 1000,
+  "status_pct": {
+    "OK": 0.1667,
+    "REVISAR": 0.8333,
+    "EMERGENTE": 0.0
+  },
+  "ok_volume_pct": 0.005,
+  "emergent_volume_pct": 0.0,
+  "confidence_avg": 0.0833,
+  "macro_distribution": {
+    "Equipamentos e Infraestrutura": {
+      "topic_count": 3,
+      "volume": 13,
+      "volume_pct": 0.013
+    },
+    "Pessoas e Liderança": {
+      "topic_count": 1,
+      "volume": 5,
+      "volume_pct": 0.005
+    },
+    "Processo Operacional": {
+      "topic_count": 2,
+      "volume": 9,
+      "volume_pct": 0.009
+    }
+  },
+  "status_mismatch_count": 0
+}

@@ -1,0 +1,34 @@
+{
+  "classifications": [
+    {
+      "topic_id": 80,
+      "macro_theme": "Processo Operacional",
+      "rationale": "O termo 'inventario' e a falta de estoque apontam para problemas no processo operacional."
+    },
+    {
+      "topic_id": 81,
+      "macro_theme": "Equipamentos e Infraestrutura",
+      "rationale": "A presença de termos como 'maq', 'vibrando' e 'tarde' sugere que o problema está relacionado a equipamentos ou infraestrutura."
+    },
+    {
+      "topic_id": 82,
+      "macro_theme": "Equipamentos e Infraestrutura",
+      "rationale": "A combinação de termos como 'doca', 'congestionada' e 'estoque' indica que o problema está relacionado a equipamentos ou infraestrutura."
+    },
+    {
+      "topic_id": 83,
+      "macro_theme": "Pessoas e Liderança",
+      "rationale": "A presença de termos como 'falta', 'caixa' e 'picking' sugere que o problema está relacionado a pessoas e liderança."
+    },
+    {
+      "topic_id": 84,
+      "macro_theme": "Processo Operacional",
+      "rationale": "A combinação de termos como 'lento', 'manual' e 'picking' indica que o problema está relacionado ao processo operacional."
+    },
+    {
+      "topic_id": 85,
+      "macro_theme": "Equipamentos e Infraestrutura",
+      "rationale": "A presença de termos como 'espaco', 'falta' e 'enderecos' sugere que o problema está relacionado a equipamentos ou infraestrutura."
+    }
+  ]
+}

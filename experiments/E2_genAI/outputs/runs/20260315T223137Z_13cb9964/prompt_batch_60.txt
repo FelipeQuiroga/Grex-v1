@@ -1,0 +1,845 @@
+Voce e um classificador tematico para operacoes industriais e logistica.
+Classifique cada topic_id em exatamente 1 macrotema da taxonomia fixa.
+
+Regras obrigatorias:
+- Use TODO o contexto enviado: top_terms, examples, contexto_operacional, setor, volume_relatos e share_pct.
+- Nao classifique apenas por top_terms isolados.
+- Nao invente macrotema.
+- Nao use categoria default por conveniencia.
+- Antes de decidir, verifique sinais de "inclui" e evite termos de "nao_inclui".
+- Se houver sinais mistos, escolha o macrotema dominante e registre a incerteza no campo rationale.
+- Retorne apenas JSON valido. Nenhum texto fora do JSON.
+
+Taxonomia fixa (obrigatoria):
+- Equipamentos e Infraestrutura
+  descricao: Problemas com máquinas, sensores, esteiras, ferramentas, empilhadeiras, iluminação, ventilação, posto de trabalho e estrutura física.
+  inclui: máquina, maq, sensor, esteira, empilhadeira, ferramenta, posto, iluminação, ventilação
+  nao_inclui: liderança, cobrança, sistema, scanner, meta, processo
+- Sistemas e Ferramentas
+  descricao: Problemas com sistema, scanner, atualização, travamento, falhas digitais, dados ou ferramentas de apoio operacional.
+  inclui: sistema, scanner, bugado, travou, caiu, atualiza, dados
+  nao_inclui: máquina, empilhadeira, liderança, meta, sobrecarga
+- Pessoas e Liderança
+  descricao: Problemas de liderança, comunicação, apoio, escuta, sobrecarga da equipe, treinamento ou comportamento humano.
+  inclui: líder, lider, escuta, cobra, retorno, equipe, treinamento, sobrecarregado, operador
+  nao_inclui: máquina, sistema, scanner, infraestrutura
+- Processo Operacional
+  descricao: Problemas de fluxo, setup, separação, carregamento, organização do trabalho, rota, troca de turno ou execução do processo.
+  inclui: setup, separação, separacao, rota, troca, carregamento, fluxo, retrabalho, expedição, expedicao
+  nao_inclui: liderança, máquina, scanner, risco de segurança
+- Segurança e Risco
+  descricao: Problemas com risco operacional, check de segurança, condição insegura, incidente potencial ou exposição física relevante.
+  inclui: segurança, seguranca, risco, check, falha de segurança, condição insegura, condicao insegura
+  nao_inclui: sistema lento, líder ausente, setup lento
+
+Macrotemas permitidos:
+[
+  "Equipamentos e Infraestrutura",
+  "Sistemas e Ferramentas",
+  "Pessoas e Liderança",
+  "Processo Operacional",
+  "Segurança e Risco"
+]
+
+Exemplos positivos (acerto):
+Casos corretos:
+1. {"input": "sensor desalinhado e esteira parando no turno da noite", "macro_theme": "Equipamentos e Infraestrutura", "porque": "o foco é falha física de sensor/esteira."}
+2. {"input": "scanner sem bateria, sistema caiu e não atualiza dados", "macro_theme": "Sistemas e Ferramentas", "porque": "o problema principal é digital (scanner/sistema/dados)."}
+3. {"input": "líder ausente, equipe sem retorno e operador sobrecarregado", "macro_theme": "Pessoas e Liderança", "porque": "o núcleo do tema é comportamento e liderança."}
+4. {"input": "setup lento, retrabalho e troca de turno desorganizada", "macro_theme": "Processo Operacional", "porque": "a causa está no fluxo e execução do processo."}
+5. {"input": "check de segurança falhou com condição insegura na operação", "macro_theme": "Segurança e Risco", "porque": "há risco operacional explícito."}
+
+Contraexemplos (erros comuns a evitar):
+Casos para NAO repetir:
+1. {"input": "líder não escuta equipe e cobra meta", "nao_e": "Sistemas e Ferramentas", "correto": "Pessoas e Liderança", "porque": "não há falha de sistema/scanner, e sim liderança."}
+2. {"input": "sistema lento no scanner durante separação", "nao_e": "Processo Operacional", "correto": "Sistemas e Ferramentas", "porque": "o fluxo sofre impacto, mas a origem é sistema/scanner."}
+3. {"input": "setup lento sem risco ou incidente de segurança", "nao_e": "Segurança e Risco", "correto": "Processo Operacional", "porque": "lento não implica risco físico por si só."}
+4. {"input": "meta alta e cobrança do líder", "nao_e": "Equipamentos e Infraestrutura", "correto": "Pessoas e Liderança", "porque": "não há falha de máquina/estrutura."}
+
+Formato de saida (JSON estrito):
+```json
+{
+  "classifications": [
+    {
+      "topic_id": 0,
+      "macro_theme": "string",
+      "rationale": "curta e objetiva (max 180 chars)"
+    }
+  ]
+}
+```
+
+Payload de topicos para classificacao:
+{
+  "topics": [
+    {
+      "topic_id": 60,
+      "volume_relatos": 7,
+      "share_pct": 0.007,
+      "top_terms": [
+        "organizacao",
+        "doca",
+        "sem",
+        "dnv",
+        "turno",
+        "no"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 7
+      },
+      "examples": [
+        "doca sem organizacao dnv",
+        "doca sem organizacao",
+        "doca sem organizacao no turno"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "doca",
+          "organizacao",
+          "turno"
+        ],
+        "examples_preview": [
+          "doca sem organizacao dnv",
+          "doca sem organizacao",
+          "doca sem organizacao no turno"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 61,
+      "volume_relatos": 7,
+      "share_pct": 0.007,
+      "top_terms": [
+        "quebrado",
+        "palete",
+        "endereco",
+        "armazem",
+        "por",
+        "no"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 7
+      },
+      "examples": [
+        "palete quebrado no armazem 4",
+        "palete quebrado",
+        "palete quebrado por endereco"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "palete",
+          "quebrado",
+          "armazem",
+          "endereco"
+        ],
+        "examples_preview": [
+          "palete quebrado no armazem 4",
+          "palete quebrado",
+          "palete quebrado por endereco"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 62,
+      "volume_relatos": 7,
+      "share_pct": 0.007,
+      "top_terms": [
+        "incompleto",
+        "pedido",
+        "pela",
+        "manha",
+        "por",
+        "erro"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 7
+      },
+      "examples": [
+        "pedido incompleto",
+        "pedido incompleto por erro",
+        "pedido incompleto pela manha"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "pedido",
+          "incompleto",
+          "erro",
+          "pela",
+          "manha"
+        ],
+        "examples_preview": [
+          "pedido incompleto",
+          "pedido incompleto por erro",
+          "pedido incompleto pela manha"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 63,
+      "volume_relatos": 7,
+      "share_pct": 0.007,
+      "top_terms": [
+        "deslocamento",
+        "mt",
+        "desnecessario",
+        "manual"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 7
+      },
+      "examples": [
+        "mt deslocamento manual",
+        "mt deslocamento",
+        "mt deslocamento desnecessario"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "deslocamento",
+          "desnecessario",
+          "manual"
+        ],
+        "examples_preview": [
+          "mt deslocamento manual",
+          "mt deslocamento",
+          "mt deslocamento desnecessario"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 64,
+      "volume_relatos": 7,
+      "share_pct": 0.007,
+      "top_terms": [
+        "caiu",
+        "sistema",
+        "meio",
+        "enderecos",
+        "do",
+        "pela"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 7
+      },
+      "examples": [
+        "sistema caiu pela manha",
+        "sistema bugado por erro",
+        "sistema caiu enderecos",
+        "sistema caiu",
+        "sistema caiu no meio do turno",
+        "sistema caiu hj"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "sistema",
+          "caiu",
+          "meio",
+          "turno",
+          "pela",
+          "manha",
+          "enderecos",
+          "bugado",
+          "erro"
+        ],
+        "examples_preview": [
+          "sistema caiu pela manha",
+          "sistema bugado por erro",
+          "sistema caiu enderecos"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 65,
+      "volume_relatos": 7,
+      "share_pct": 0.007,
+      "top_terms": [
+        "desorganizado",
+        "estoque",
+        "direito",
+        "hj"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 7
+      },
+      "examples": [
+        "estoque desorganizado",
+        "estoque desorganizado direito",
+        "estoque desorganizado hj"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "estoque",
+          "desorganizado",
+          "direito"
+        ],
+        "examples_preview": [
+          "estoque desorganizado",
+          "estoque desorganizado direito",
+          "estoque desorganizado hj"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 66,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "ilegivel",
+        "etiqueta",
+        "armazem",
+        "direito",
+        "por",
+        "estoque"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 6
+      },
+      "examples": [
+        "etiqueta ilegivel por estoque",
+        "etiqueta ilegivel no armazem 4",
+        "etiqueta ilegivel",
+        "etiqueta ilegivel direito"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "etiqueta",
+          "ilegivel",
+          "estoque",
+          "direito",
+          "armazem"
+        ],
+        "examples_preview": [
+          "etiqueta ilegivel por estoque",
+          "etiqueta ilegivel no armazem 4",
+          "etiqueta ilegivel"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 67,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "bateria",
+        "sem",
+        "empilhadeira",
+        "descarregar",
+        "congestionada",
+        "falhando"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 6
+      },
+      "examples": [
+        "fila grande p descarregar sem bateria",
+        "empilhadeira falhando sem bateria",
+        "empilhadeira parada sem bateria",
+        "estoque mal enderecado sem bateria",
+        "doca congestionada sem bateria"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "bateria",
+          "empilhadeira",
+          "falhando",
+          "parada",
+          "estoque",
+          "mal",
+          "enderecado",
+          "fila",
+          "grande",
+          "descarregar",
+          "doca",
+          "congestionada"
+        ],
+        "examples_preview": [
+          "fila grande p descarregar sem bateria",
+          "empilhadeira falhando sem bateria",
+          "empilhadeira parada sem bateria"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 68,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "incompleta",
+        "equipe",
+        "hj",
+        "resultado"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 6
+      },
+      "examples": [
+        "equipe incompleta resultado",
+        "equipe incompleta",
+        "equipe incompleta hj"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "equipe",
+          "incompleta",
+          "resultado"
+        ],
+        "examples_preview": [
+          "equipe incompleta resultado",
+          "equipe incompleta",
+          "equipe incompleta hj"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 69,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "confuso",
+        "picking",
+        "suficiente"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 6
+      },
+      "examples": [
+        "picking confuso",
+        "picking confuso suficiente"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "picking",
+          "confuso",
+          "suficiente"
+        ],
+        "examples_preview": [
+          "picking confuso",
+          "picking confuso suficiente"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 70,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "pesado",
+        "ambiente",
+        "feito",
+        "sobrecarregado",
+        "troca",
+        "desalinhado"
+      ],
+      "setor": "industria",
+      "setor_distribution": {
+        "industria": 6
+      },
+      "examples": [
+        "ambiente pesado sobrecarregado",
+        "ambiente pesado hj",
+        "ambiente pesado na troca de turno",
+        "ambiente pesado feito errado",
+        "ambiente pesado desalinhado",
+        "ambiente pesado de setup"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "ambiente",
+          "pesado",
+          "setup",
+          "feito",
+          "errado",
+          "desalinhado",
+          "sobrecarregado",
+          "troca",
+          "turno"
+        ],
+        "examples_preview": [
+          "ambiente pesado sobrecarregado",
+          "ambiente pesado hj",
+          "ambiente pesado na troca de turno"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 71,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "fria",
+        "comida",
+        "eletrica",
+        "toda",
+        "hora",
+        "setor"
+      ],
+      "setor": "industria",
+      "setor_distribution": {
+        "industria": 6
+      },
+      "examples": [
+        "comida fria ngm",
+        "comida fria no setor b",
+        "comida fria no refeitorio",
+        "comida fria temp bugado",
+        "comida fria toda hora",
+        "comida fria por falha eletrica"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "comida",
+          "fria",
+          "refeitorio",
+          "falha",
+          "eletrica",
+          "toda",
+          "hora",
+          "temp",
+          "bugado",
+          "setor"
+        ],
+        "examples_preview": [
+          "comida fria ngm",
+          "comida fria no setor b",
+          "comida fria no refeitorio"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 72,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "voltou",
+        "pedido",
+        "errado",
+        "hj",
+        "turno",
+        "no"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 6
+      },
+      "examples": [
+        "pedido voltou errado hj",
+        "pedido voltou errado no turno",
+        "pedido voltou errado"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "pedido",
+          "voltou",
+          "errado",
+          "turno"
+        ],
+        "examples_preview": [
+          "pedido voltou errado hj",
+          "pedido voltou errado no turno",
+          "pedido voltou errado"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 73,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "horas",
+        "extras",
+        "excesso",
+        "de",
+        "eletrica",
+        "falha"
+      ],
+      "setor": "industria",
+      "setor_distribution": {
+        "industria": 6
+      },
+      "examples": [
+        "excesso de horas extras de setup",
+        "excesso de horas extras na troca de turno",
+        "excesso de horas extras",
+        "excesso de horas extras por falha eletrica",
+        "excesso de horas extras ngm",
+        "excesso de horas extras confusa"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "excesso",
+          "horas",
+          "extras",
+          "falha",
+          "eletrica",
+          "setup",
+          "troca",
+          "turno",
+          "confusa"
+        ],
+        "examples_preview": [
+          "excesso de horas extras de setup",
+          "excesso de horas extras na troca de turno",
+          "excesso de horas extras"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 74,
+      "volume_relatos": 6,
+      "share_pct": 0.006,
+      "top_terms": [
+        "separacao",
+        "erro",
+        "endereco",
+        "na",
+        "por",
+        "estoque"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 6
+      },
+      "examples": [
+        "erro na separacao por endereco",
+        "erro na separacao",
+        "erro na separacao estoque"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "erro",
+          "separacao",
+          "endereco",
+          "estoque"
+        ],
+        "examples_preview": [
+          "erro na separacao por endereco",
+          "erro na separacao",
+          "erro na separacao estoque"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 75,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "produto",
+        "danificado",
+        "urgencia",
+        "com",
+        "enderecos",
+        "novo"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 5
+      },
+      "examples": [
+        "produto danificado novo operador",
+        "produto danificado com urgencia",
+        "produto danificado",
+        "produto danificado enderecos"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "produto",
+          "danificado",
+          "urgencia",
+          "enderecos",
+          "novo",
+          "operador"
+        ],
+        "examples_preview": [
+          "produto danificado novo operador",
+          "produto danificado com urgencia",
+          "produto danificado"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 76,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "nas",
+        "dor",
+        "costas",
+        "supervisor",
+        "pelo",
+        "depois"
+      ],
+      "setor": "industria",
+      "setor_distribution": {
+        "industria": 5
+      },
+      "examples": [
+        "dor nas costas demais",
+        "dor nas costas na prensa",
+        "dor nas costas mal ajustado",
+        "dor nas costas pelo supervisor",
+        "dor nas costas depois do turno"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "dor",
+          "costas",
+          "depois",
+          "turno",
+          "pelo",
+          "supervisor",
+          "prensa",
+          "mal",
+          "ajustado",
+          "demais"
+        ],
+        "examples_preview": [
+          "dor nas costas demais",
+          "dor nas costas na prensa",
+          "dor nas costas mal ajustado"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 77,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "pra",
+        "sobrecarregada",
+        "picking",
+        "rota",
+        "parada",
+        "retrabalho"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 5
+      },
+      "examples": [
+        "rota sobrecarregada pra picking",
+        "retrabalho na rota pra picking",
+        "empilhadeira parada pra picking"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "picking",
+          "rota",
+          "sobrecarregada",
+          "retrabalho",
+          "empilhadeira",
+          "parada"
+        ],
+        "examples_preview": [
+          "rota sobrecarregada pra picking",
+          "retrabalho na rota pra picking",
+          "empilhadeira parada pra picking"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 78,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "caminhao",
+        "atrasado",
+        "enderecos",
+        "frequente",
+        "por",
+        "estoque"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 5
+      },
+      "examples": [
+        "caminhao atrasado estoque",
+        "caminhao atrasado frequente",
+        "caminhao atrasado",
+        "caminhao atrasado por erro",
+        "caminhao atrasado enderecos"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "caminhao",
+          "atrasado",
+          "estoque",
+          "frequente",
+          "erro",
+          "enderecos"
+        ],
+        "examples_preview": [
+          "caminhao atrasado estoque",
+          "caminhao atrasado frequente",
+          "caminhao atrasado"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 79,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "palete",
+        "errado",
+        "carregado",
+        "estoque",
+        "dnv",
+        "por"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 5
+      },
+      "examples": [
+        "palete errado dnv",
+        "palete errado",
+        "palete errado por estoque",
+        "palete errado estoque",
+        "palete errado carregado"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "palete",
+          "errado",
+          "estoque",
+          "carregado"
+        ],
+        "examples_preview": [
+          "palete errado dnv",
+          "palete errado",
+          "palete errado por estoque"
+        ],
+        "sample_method": "hash"
+      }
+    }
+  ]
+}
