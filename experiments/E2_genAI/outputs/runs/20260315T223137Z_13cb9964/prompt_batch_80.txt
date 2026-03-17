@@ -1,0 +1,297 @@
+Voce e um classificador tematico para operacoes industriais e logistica.
+Classifique cada topic_id em exatamente 1 macrotema da taxonomia fixa.
+
+Regras obrigatorias:
+- Use TODO o contexto enviado: top_terms, examples, contexto_operacional, setor, volume_relatos e share_pct.
+- Nao classifique apenas por top_terms isolados.
+- Nao invente macrotema.
+- Nao use categoria default por conveniencia.
+- Antes de decidir, verifique sinais de "inclui" e evite termos de "nao_inclui".
+- Se houver sinais mistos, escolha o macrotema dominante e registre a incerteza no campo rationale.
+- Retorne apenas JSON valido. Nenhum texto fora do JSON.
+
+Taxonomia fixa (obrigatoria):
+- Equipamentos e Infraestrutura
+  descricao: Problemas com máquinas, sensores, esteiras, ferramentas, empilhadeiras, iluminação, ventilação, posto de trabalho e estrutura física.
+  inclui: máquina, maq, sensor, esteira, empilhadeira, ferramenta, posto, iluminação, ventilação
+  nao_inclui: liderança, cobrança, sistema, scanner, meta, processo
+- Sistemas e Ferramentas
+  descricao: Problemas com sistema, scanner, atualização, travamento, falhas digitais, dados ou ferramentas de apoio operacional.
+  inclui: sistema, scanner, bugado, travou, caiu, atualiza, dados
+  nao_inclui: máquina, empilhadeira, liderança, meta, sobrecarga
+- Pessoas e Liderança
+  descricao: Problemas de liderança, comunicação, apoio, escuta, sobrecarga da equipe, treinamento ou comportamento humano.
+  inclui: líder, lider, escuta, cobra, retorno, equipe, treinamento, sobrecarregado, operador
+  nao_inclui: máquina, sistema, scanner, infraestrutura
+- Processo Operacional
+  descricao: Problemas de fluxo, setup, separação, carregamento, organização do trabalho, rota, troca de turno ou execução do processo.
+  inclui: setup, separação, separacao, rota, troca, carregamento, fluxo, retrabalho, expedição, expedicao
+  nao_inclui: liderança, máquina, scanner, risco de segurança
+- Segurança e Risco
+  descricao: Problemas com risco operacional, check de segurança, condição insegura, incidente potencial ou exposição física relevante.
+  inclui: segurança, seguranca, risco, check, falha de segurança, condição insegura, condicao insegura
+  nao_inclui: sistema lento, líder ausente, setup lento
+
+Macrotemas permitidos:
+[
+  "Equipamentos e Infraestrutura",
+  "Sistemas e Ferramentas",
+  "Pessoas e Liderança",
+  "Processo Operacional",
+  "Segurança e Risco"
+]
+
+Exemplos positivos (acerto):
+Casos corretos:
+1. {"input": "sensor desalinhado e esteira parando no turno da noite", "macro_theme": "Equipamentos e Infraestrutura", "porque": "o foco é falha física de sensor/esteira."}
+2. {"input": "scanner sem bateria, sistema caiu e não atualiza dados", "macro_theme": "Sistemas e Ferramentas", "porque": "o problema principal é digital (scanner/sistema/dados)."}
+3. {"input": "líder ausente, equipe sem retorno e operador sobrecarregado", "macro_theme": "Pessoas e Liderança", "porque": "o núcleo do tema é comportamento e liderança."}
+4. {"input": "setup lento, retrabalho e troca de turno desorganizada", "macro_theme": "Processo Operacional", "porque": "a causa está no fluxo e execução do processo."}
+5. {"input": "check de segurança falhou com condição insegura na operação", "macro_theme": "Segurança e Risco", "porque": "há risco operacional explícito."}
+
+Contraexemplos (erros comuns a evitar):
+Casos para NAO repetir:
+1. {"input": "líder não escuta equipe e cobra meta", "nao_e": "Sistemas e Ferramentas", "correto": "Pessoas e Liderança", "porque": "não há falha de sistema/scanner, e sim liderança."}
+2. {"input": "sistema lento no scanner durante separação", "nao_e": "Processo Operacional", "correto": "Sistemas e Ferramentas", "porque": "o fluxo sofre impacto, mas a origem é sistema/scanner."}
+3. {"input": "setup lento sem risco ou incidente de segurança", "nao_e": "Segurança e Risco", "correto": "Processo Operacional", "porque": "lento não implica risco físico por si só."}
+4. {"input": "meta alta e cobrança do líder", "nao_e": "Equipamentos e Infraestrutura", "correto": "Pessoas e Liderança", "porque": "não há falha de máquina/estrutura."}
+
+Formato de saida (JSON estrito):
+```json
+{
+  "classifications": [
+    {
+      "topic_id": 0,
+      "macro_theme": "string",
+      "rationale": "curta e objetiva (max 180 chars)"
+    }
+  ]
+}
+```
+
+Payload de topicos para classificacao:
+{
+  "topics": [
+    {
+      "topic_id": 80,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "inventario",
+        "errado",
+        "carregado",
+        "por",
+        "estoque",
+        "erro"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 5
+      },
+      "examples": [
+        "inventario errado carregado",
+        "inventario errado",
+        "inventario errado por estoque",
+        "inventario errado por erro"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "inventario",
+          "errado",
+          "estoque",
+          "carregado",
+          "erro"
+        ],
+        "examples_preview": [
+          "inventario errado carregado",
+          "inventario errado",
+          "inventario errado por estoque"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 81,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "vibrando",
+        "maq",
+        "tarde",
+        "mas",
+        "ajuda",
+        "aviso"
+      ],
+      "setor": "industria",
+      "setor_distribution": {
+        "industria": 5
+      },
+      "examples": [
+        "maq vibrando mas n ajuda",
+        "maq vibrando sem aviso",
+        "maq vibrando a tarde",
+        "maq vibrando na linha 3",
+        "maq vibrando demais"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "maq",
+          "vibrando",
+          "demais",
+          "tarde",
+          "aviso",
+          "mas",
+          "ajuda",
+          "linha"
+        ],
+        "examples_preview": [
+          "maq vibrando mas n ajuda",
+          "maq vibrando sem aviso",
+          "maq vibrando a tarde"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 82,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "congestionada",
+        "doca",
+        "dnv",
+        "estoque"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 5
+      },
+      "examples": [
+        "doca congestionada dnv",
+        "doca congestionada estoque",
+        "doca congestionada"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "doca",
+          "congestionada",
+          "estoque"
+        ],
+        "examples_preview": [
+          "doca congestionada dnv",
+          "doca congestionada estoque",
+          "doca congestionada"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 83,
+      "volume_relatos": 5,
+      "share_pct": 0.005,
+      "top_terms": [
+        "caixa",
+        "falta",
+        "pra",
+        "pela",
+        "manha",
+        "frequente"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 5
+      },
+      "examples": [
+        "falta caixa",
+        "falta caixa frequente",
+        "falta caixa pela manha",
+        "falta caixa pra picking"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "falta",
+          "caixa",
+          "picking",
+          "pela",
+          "manha",
+          "frequente"
+        ],
+        "examples_preview": [
+          "falta caixa",
+          "falta caixa frequente",
+          "falta caixa pela manha"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 84,
+      "volume_relatos": 4,
+      "share_pct": 0.004,
+      "top_terms": [
+        "lento",
+        "manual",
+        "picking",
+        "desnecessario"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 4
+      },
+      "examples": [
+        "picking manual lento desnecessario",
+        "picking manual lento"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "picking",
+          "manual",
+          "lento",
+          "desnecessario"
+        ],
+        "examples_preview": [
+          "picking manual lento desnecessario",
+          "picking manual lento"
+        ],
+        "sample_method": "hash"
+      }
+    },
+    {
+      "topic_id": 85,
+      "volume_relatos": 3,
+      "share_pct": 0.003,
+      "top_terms": [
+        "espaco",
+        "falta",
+        "resultado",
+        "enderecos",
+        "turno",
+        "no"
+      ],
+      "setor": "cd",
+      "setor_distribution": {
+        "cd": 3
+      },
+      "examples": [
+        "falta espaco no turno",
+        "falta espaco resultado",
+        "falta espaco enderecos"
+      ],
+      "contexto_operacional": {
+        "salient_terms": [
+          "falta",
+          "espaco",
+          "enderecos",
+          "resultado",
+          "turno"
+        ],
+        "examples_preview": [
+          "falta espaco no turno",
+          "falta espaco resultado",
+          "falta espaco enderecos"
+        ],
+        "sample_method": "hash"
+      }
+    }
+  ]
+}

@@ -1,0 +1,284 @@
+{
+  "classifications": [
+    {
+      "topic_id": 80,
+      "macro_theme": "Processo Operacional",
+      "rationale": "O termo 'inventario' e a falta de estoque apontam para problemas no processo operacional."
+    },
+    {
+      "topic_id": 81,
+      "macro_theme": "Equipamentos e Infraestrutura",
+      "rationale": "A presença de termos como 'maq', 'vibrando' e 'tarde' sugere que o problema está relacionado a equipamentos ou infraestrutura."
+    },
+    {
+      "topic_id": 82,
+      "macro_theme": "Equipamentos e Infraestrutura",
+      "rationale": "A combinação de termos como 'doca', 'congestionada' e 'estoque' indica que o problema está relacionado a equipamentos ou infraestrutura."
+    },
+    {
+      "topic_id": 83,
+      "macro_theme": "Pessoas e Liderança",
+      "rationale": "A presença de termos como 'falta', 'caixa' e 'picking' sugere que o problema está relacionado a pessoas e liderança."
+    },
+    {
+      "topic_id": 84,
+      "macro_theme": "Processo Operacional",
+      "rationale": "A combinação de termos como 'lento', 'manual' e 'picking' indica que o problema está relacionado ao processo operacional."
+    },
+    {
+      "topic_id": 85,
+      "macro_theme": "Equipamentos e Infraestrutura",
+      "rationale": "A presença de termos como 'espaco', 'falta' e 'enderecos' sugere que o problema está relacionado a equipamentos ou infraestrutura."
+    }
+  ],
+  "ambiguity_analysis": [
+    {
+      "topic_id": 80,
+      "macro_theme": "Processo Operacional",
+      "confidence": "LOW",
+      "status": "REVISAR",
+      "ambiguity_reason": "sem sinais fortes de inclusao para o macrotema escolhido",
+      "signals": {
+        "selected_theme": {
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        },
+        "top_competitor": {
+          "macro_theme": "Equipamentos e Infraestrutura",
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "topic_id": 81,
+      "macro_theme": "Equipamentos e Infraestrutura",
+      "confidence": "MEDIUM",
+      "status": "OK",
+      "ambiguity_reason": "classificacao consistente com os sinais do topico",
+      "signals": {
+        "selected_theme": {
+          "include_hits": 1,
+          "exclude_hits": 0,
+          "score": 1.0
+        },
+        "top_competitor": {
+          "macro_theme": "Sistemas e Ferramentas",
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "topic_id": 82,
+      "macro_theme": "Equipamentos e Infraestrutura",
+      "confidence": "LOW",
+      "status": "REVISAR",
+      "ambiguity_reason": "sem sinais fortes de inclusao para o macrotema escolhido",
+      "signals": {
+        "selected_theme": {
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        },
+        "top_competitor": {
+          "macro_theme": "Sistemas e Ferramentas",
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "topic_id": 83,
+      "macro_theme": "Pessoas e Liderança",
+      "confidence": "LOW",
+      "status": "REVISAR",
+      "ambiguity_reason": "sem sinais fortes de inclusao para o macrotema escolhido",
+      "signals": {
+        "selected_theme": {
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        },
+        "top_competitor": {
+          "macro_theme": "Equipamentos e Infraestrutura",
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "topic_id": 84,
+      "macro_theme": "Processo Operacional",
+      "confidence": "LOW",
+      "status": "REVISAR",
+      "ambiguity_reason": "sem sinais fortes de inclusao para o macrotema escolhido",
+      "signals": {
+        "selected_theme": {
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        },
+        "top_competitor": {
+          "macro_theme": "Equipamentos e Infraestrutura",
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "topic_id": 85,
+      "macro_theme": "Equipamentos e Infraestrutura",
+      "confidence": "LOW",
+      "status": "REVISAR",
+      "ambiguity_reason": "sem sinais fortes de inclusao para o macrotema escolhido",
+      "signals": {
+        "selected_theme": {
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        },
+        "top_competitor": {
+          "macro_theme": "Sistemas e Ferramentas",
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        }
+      }
+    }
+  ],
+  "mappings": [
+    {
+      "topic_id": 80,
+      "macro_theme": "Processo Operacional",
+      "confidence": "LOW",
+      "status": "REVISAR",
+      "rationale": "O termo 'inventario' e a falta de estoque apontam para problemas no processo operacional.",
+      "ambiguity_reason": "sem sinais fortes de inclusao para o macrotema escolhido",
+      "signals": {
+        "selected_theme": {
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        },
+        "top_competitor": {
+          "macro_theme": "Equipamentos e Infraestrutura",
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "topic_id": 81,
+      "macro_theme": "Equipamentos e Infraestrutura",
+      "confidence": "MEDIUM",
+      "status": "OK",
+      "rationale": "A presença de termos como 'maq', 'vibrando' e 'tarde' sugere que o problema está relacionado a equipamentos ou infraestrutura.",
+      "ambiguity_reason": "classificacao consistente com os sinais do topico",
+      "signals": {
+        "selected_theme": {
+          "include_hits": 1,
+          "exclude_hits": 0,
+          "score": 1.0
+        },
+        "top_competitor": {
+          "macro_theme": "Sistemas e Ferramentas",
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "topic_id": 82,
+      "macro_theme": "Equipamentos e Infraestrutura",
+      "confidence": "LOW",
+      "status": "REVISAR",
+      "rationale": "A combinação de termos como 'doca', 'congestionada' e 'estoque' indica que o problema está relacionado a equipamentos ou infraestrutura.",
+      "ambiguity_reason": "sem sinais fortes de inclusao para o macrotema escolhido",
+      "signals": {
+        "selected_theme": {
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        },
+        "top_competitor": {
+          "macro_theme": "Sistemas e Ferramentas",
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "topic_id": 83,
+      "macro_theme": "Pessoas e Liderança",
+      "confidence": "LOW",
+      "status": "REVISAR",
+      "rationale": "A presença de termos como 'falta', 'caixa' e 'picking' sugere que o problema está relacionado a pessoas e liderança.",
+      "ambiguity_reason": "sem sinais fortes de inclusao para o macrotema escolhido",
+      "signals": {
+        "selected_theme": {
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        },
+        "top_competitor": {
+          "macro_theme": "Equipamentos e Infraestrutura",
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "topic_id": 84,
+      "macro_theme": "Processo Operacional",
+      "confidence": "LOW",
+      "status": "REVISAR",
+      "rationale": "A combinação de termos como 'lento', 'manual' e 'picking' indica que o problema está relacionado ao processo operacional.",
+      "ambiguity_reason": "sem sinais fortes de inclusao para o macrotema escolhido",
+      "signals": {
+        "selected_theme": {
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        },
+        "top_competitor": {
+          "macro_theme": "Equipamentos e Infraestrutura",
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "topic_id": 85,
+      "macro_theme": "Equipamentos e Infraestrutura",
+      "confidence": "LOW",
+      "status": "REVISAR",
+      "rationale": "A presença de termos como 'espaco', 'falta' e 'enderecos' sugere que o problema está relacionado a equipamentos ou infraestrutura.",
+      "ambiguity_reason": "sem sinais fortes de inclusao para o macrotema escolhido",
+      "signals": {
+        "selected_theme": {
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        },
+        "top_competitor": {
+          "macro_theme": "Sistemas e Ferramentas",
+          "include_hits": 0,
+          "exclude_hits": 0,
+          "score": 0.0
+        }
+      }
+    }
+  ]
+}
